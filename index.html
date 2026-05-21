@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕵️ لعبة الجاسوس - The Spy Game (نسخة أونلاين)</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #ffd89b, #c7e9fb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #ffd89b;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        input, select {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .players-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .player-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .player-card.spy {
+            border-color: #ff4444;
+            background: rgba(255, 68, 68, 0.2);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 68, 68, 0); }
+        }
+
+        .player-card.host {
+            border-color: #ffd700;
+        }
+
+        .player-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .player-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .player-badge {
+            font-size: 12px;
+            margin-top: 5px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .badge-host {
+            background: #ffd700;
+            color: #333;
+        }
+
+        .badge-spy {
+            background: #ff4444;
+            color: white;
+        }
+
+        .chat-area {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            word-wrap: break-word;
+        }
+
+        .message.system {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            text-align: center;
+        }
+
+        .message.spy {
+            background: rgba(255, 68, 68, 0.3);
+            border-right: 3px solid #ff4444;
+        }
+
+        .message.winner {
+            background: rgba(76, 175, 80, 0.3);
+            border-right: 3px solid #4caf50;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            margin: 0;
+        }
+
+        .chat-input-area button {
+            width: auto;
+            padding: 12px 20px;
+            margin: 0;
+        }
+
+        .room-code {
+            text-align: center;
+            font-size: 48px;
+            letter-spacing: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .secret-word {
+            text-align: center;
+            font-size: 32px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .spy-message {
+            text-align: center;
+            font-size: 24px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            border-radius: 15px;
+            margin: 20px 0;
+            animation: pulse 1s infinite;
+        }
+
+        .vote-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .vote-btn {
+            flex: 1;
+            min-width: 100px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 15px;
+            border-radius: 10px;
+            background: #333;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            text-align: center;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .alert-success { background: #4caf50; }
+        .alert-error { background: #f44336; }
+        .alert-info { background: #2196f3; }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .inline-btn {
+            width: auto;
+            margin: 0;
+            padding: 10px 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .card { padding: 20px; }
+            h1 { font-size: 1.8em; }
+            .room-code { font-size: 28px; letter-spacing: 5px; }
+            .flex-between { flex-direction: column; }
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 12px;
+            margin-top: -5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- شاشة البداية -->
+        <div id="startScreen" class="screen active">
+            <div class="card">
+                <h1>🕵️ لعبة الجاسوس 🎭</h1>
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <p>🎮 لعبة التخمين والأسئلة الممتعة!</p>
+                    <p>👥 من 3 إلى 10 لاعبين</p>
+                    <p>🌐 تعمل عبر الإنترنت باستخدام Firebase</p>
+                </div>
+                
+                <div id="nameSection">
+                    <input type="text" id="playerName" placeholder="👤 أدخل اسمك (مطلوب)" maxlength="20">
+                    <div id="nameError" class="error-message"></div>
+                </div>
+                
+                <button onclick="showCreateRoom()" id="createRoomBtn" disabled>🏠 إنشاء غرفة جديدة</button>
+                <button onclick="showJoinRoom()" id="joinRoomBtn" disabled class="btn-secondary">🔑 الانضمام إلى غرفة</button>
+            </div>
+        </div>
+
+        <!-- شاشة إنشاء غرفة -->
+        <div id="createScreen" class="screen">
+            <div class="card">
+                <h2>🏠 إنشاء غرفة جديدة</h2>
+                <label>👥 عدد اللاعبين (3-10):</label>
+                <input type="number" id="maxPlayers" min="3" max="10" value="5">
+                
+                <label>🎮 طور اللعبة:</label>
+                <select id="gameMode">
+                    <option value="ONLINE">💬 أونلاين (دردشة مدمجة)</option>
+                    <option value="LOCAL">🎭 محلي (شفاهي - تظهر الكلمة لكل لاعب)</option>
+                </select>
+                
+                <button onclick="createRoom()">✅ إنشاء الغرفة</button>
+                <button onclick="backToStart()" class="btn-secondary">↩️ رجوع</button>
+            </div>
+        </div>
+
+        <!-- شاشة الانضمام -->
+        <div id="joinScreen" class="screen">
+            <div class="card">
+                <h2>🔑 الانضمام إلى غرفة</h2>
+                <input type="text" id="roomCodeJoin" placeholder="📝 كود الغرفة (4 أرقام)" maxlength="4">
+                <button onclick="joinRoom()">✅ انضمام</button>
+                <button onclick="backToStart()" class="btn-secondary">↩️ رجوع</button>
+            </div>
+        </div>
+
+        <!-- شاشة اللعبة -->
+        <div id="gameScreen" class="screen">
+            <div class="flex-between">
+                <div class="card" style="flex: 2;">
+                    <div class="game-info">
+                        <h2>🎮 غرفة: <span id="roomCodeDisplay">----</span></h2>
+                        <button onclick="copyRoomCode()" class="inline-btn">📋 نسخ الكود</button>
+                        <button onclick="leaveRoom()" class="inline-btn btn-secondary">🚪 مغادرة</button>
+                    </div>
+                    
+                    <div id="playersContainer" class="players-list"></div>
+                    
+                    <div id="gameStatus"></div>
+                    
+                    <div id="actionButtons">
+                        <button id="startGameBtn" onclick="startGame()" style="display: none;">🎮 بدء اللعبة</button>
+                    </div>
+                </div>
+                
+                <div class="card" style="flex: 3;">
+                    <h2>💬 الدردشة</h2>
+                    <div class="chat-area">
+                        <div id="messages" class="messages"></div>
+                        <div class="chat-input-area">
+                            <input type="text" id="chatInput" placeholder="اكتب رسالتك..." onkeypress="if(event.key==='Enter') sendChat()">
+                            <button onclick="sendChat()">إرسال 📤</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="specialControls"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== إعدادات Firebase ====================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCTKYD680Jdbl0azC9RTtuKZBaLX2uU_Ck",
+            authDomain: "my-online-store-34f34.firebaseapp.com",
+            databaseURL: "https://my-online-store-34f34-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "my-online-store-34f34",
+            storageBucket: "my-online-store-34f34.firebasestorage.app",
+            messagingSenderId: "288655549705",
+            appId: "1:288655549705:web:06901ce4ac1a50eebe1fd8"
+        };
+
+        // تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // ==================== البيانات ====================
+        let currentPlayer = {
+            name: '',
+            roomCode: '',
+            isHost: false,
+            isSpy: false,
+            secretWord: ''
+        };
+        
+        let gameState = {
+            started: false,
+            mode: 'ONLINE',
+            players: [],
+            playersData: [],
+            votes: {},
+            roundEnded: false,
+            secretWord: '',
+            spyName: ''
+        };
+        
+        let roomListener = null;
+        let chatListener = null;
+        
+        // الكلمات السرية
+        const SECRET_WORDS = [
+            "مطعم", "مدرسة", "مطار", "مستشفى", "سوق", "قهوة", "زرودية", "بطاطا", "طاجين", "كسكسي", "شخشوخة", "مطلوع",
+    "محاجب", "دوبارة", "بوراك", "حريرة", "شاورما", "كاشير", "زفيطي",
+    "خبز الدار", "مقرود", "زلابية", "قلب اللوز", "رفيس", "طمينة",
+
+    "حومة", "زنقة", "دار", "سطح", "كوزينة", "صباط", "سروال",
+    "قندورة", "برنوس", "شاشية", "كاسكيطة", "جيب", "كارتابل",
+    "كيران", "طاكسي", "ترونسبور", "محطة", "رونبوان",
+
+    "بابور", "طيارة", "كاميو", "موتور", "بيسي", "تلفاز", "تيليفون",
+    "شارجور", "كونيكسيون", "ويفي", "مانيطا", "مانيط", "سماعات",
+
+    "ملعب", "زنقة", "سوق", "جامع", "قهوة", "شاطئ", "غابة",
+    "مسبح", "حديقة", "سيبار", "مكتبة", "صيدلية", "مستشفى",
+    "ثانوية", "متوسطة", "ابتدائية", "جامعة", "إقامة",
+
+    "شمة", "قازوز", "عصير", "ياوورت", "حليب", "قهوة بالحليب",
+    "ماء", "ليموناد", "شاي", "دلاع", "برتقال", "تفاح",
+
+    "بارح", "درك", "غدوة", "زعمة", "واش", "علاه", "بصح",
+    "هايلة", "مليحة", "نورمال", "خاطيك", "فايق", "مهبول",
+    "زعفان", "فرحان", "برد", "سخانة",
+
+    "فيفا", "بيس", "فورتنايت", "بابجي", "ماينكرافت", "كود",
+    "بلايستيشن", "اكس بوكس", "مانيط", "كونترول", "سيرفر",
+
+    "عرس", "حنة", "سبوع", "عيد", "رمضان", "صحور", "فطور",
+    "تراويح", "لمة", "قعدة", "قشابية", "كسوة",
+
+    "شرجم", "بيبان", "فرشيطة", "طابلة", "كرسي", "ثلاجة",
+    "فور", "ميكروويف", "غسالة", "مروحة", "كليماتيزور", "حديقة", 
+            "مكتبة", "مسجد", "صالة رياضية", "فندق", "محطة قطار", "متحف",
+            "ملعب", "شاطئ", "مقهى", "مصنع", "بوقالة", "كران", "بنة", "دلاع", "قرعة", "لوبيا", "جلبانة",
+    "عدس", "روز", "مقرونة", "رخسيس", "سردين", "مرقة", "فريت",
+    "شطيطحة", "عصبان", "بولفاف", "براج", "غريبية", "بشار",
+
+    "بريكول", "بالة", "كابة", "كاشي", "مفتاح", "طوموبيل",
+    "فليكسية", "بيرمي", "كارت غريز", "ديباناج", "ميكانيك",
+    "بومبة", "رويدة", "فريم", "كوفيرطة", "كابو",
+
+    "سبور", "بالون", "تيران", "حارس", "مدرب", "دربي",
+    "بطولة", "هداف", "ضربة جزاء", "فاول", "كورنار",
+    "تسلل", "تبديل", "صافرة",
+
+    "دوش", "صابون", "سطل", "زرابي", "مخدة", "حاشية",
+    "بونجة", "موس", "فرشيطة", "نيفو", "بلاصا", "ضو",
+
+    "مارشي", "حانوت", "مول", "كوشة", "قصابة", "خضار",
+    "فواكه", "ميزان", "ساشي", "كيس", "دراهم", "صرف",
+
+    "بيرو", "ستيلو", "كراس", "طباشير", "سبورة", "ميدعة",
+    "ديفوار", "استاذ", "تلميذ", "نقطة", "عطلة", "امتحان",
+
+    "قهوي", "دومينو", "كارطة", "رامي", "شطرنج", "بلايلي",
+    "ضحك", "تمسخير", "قعدة", "لمة", "سهرية",
+
+    "شيفون", "سيرفيت", "مقص", "سكوتش", "كارتون", "بلاستيك",
+    "حديد", "خشب", "زجاج", "صباغة", "مارتو", "كلاو",
+
+    "ريح", "مطر", "ثلج", "رعد", "برق", "غيم", "شمس",
+    "ليل", "نهار", "فجر", "عشية",
+
+    "سميد", "فرينة", "خميرة", "زيت", "زبدة", "ملح",
+    "سكر", "فلفل", "كمون", "قرفة", "معدنوس", "ثوم",
+
+    "دخان", "ولاعة", "رماد", "طابونة", "كانون", "فحم",
+    "بترول", "مازوط", "كهرباء", "مولد",
+
+    "حانوتي", "نجار", "حداد", "خباز", "طباخ", "حلاق",
+    "خياط", "فلاح", "شرطي", "طبيب", "ممرض", "سائق", "مكتب"
+        ];
+        
+        // ==================== التحقق من الاسم ====================
+        function validateName() {
+            const nameInput = document.getElementById('playerName');
+            const name = nameInput.value.trim();
+            const nameError = document.getElementById('nameError');
+            
+            if (!name) {
+                nameError.textContent = '❌ الرجاء إدخال اسمك';
+                document.getElementById('createRoomBtn').disabled = true;
+                document.getElementById('joinRoomBtn').disabled = true;
+                return false;
+            }
+            
+            if (name.length < 2) {
+                nameError.textContent = '❌ الاسم يجب أن يكون حرفين على الأقل';
+                document.getElementById('createRoomBtn').disabled = true;
+                document.getElementById('joinRoomBtn').disabled = true;
+                return false;
+            }
+            
+            nameError.textContent = '';
+            document.getElementById('createRoomBtn').disabled = false;
+            document.getElementById('joinRoomBtn').disabled = false;
+            return true;
+        }
+        
+        // مراقبة تغيير الاسم
+        document.getElementById('playerName').addEventListener('input', validateName);
+        
+        // ==================== شاشات ====================
+        function showCreateRoom() {
+            if (!validateName()) return;
+            currentPlayer.name = document.getElementById('playerName').value.trim();
+            document.getElementById('createScreen').classList.add('active');
+            document.getElementById('startScreen').classList.remove('active');
+        }
+        
+        function showJoinRoom() {
+            if (!validateName()) return;
+            currentPlayer.name = document.getElementById('playerName').value.trim();
+            document.getElementById('joinScreen').classList.add('active');
+            document.getElementById('startScreen').classList.remove('active');
+        }
+        
+        function backToStart() {
+            document.getElementById('startScreen').classList.add('active');
+            document.getElementById('createScreen').classList.remove('active');
+            document.getElementById('joinScreen').classList.remove('active');
+            document.getElementById('gameScreen').classList.remove('active');
+            
+            // إلغاء المستمعين
+            if (roomListener) {
+                roomListener.off();
+                roomListener = null;
+            }
+            if (chatListener) {
+                chatListener.off();
+                chatListener = null;
+            }
+        }
+        
+        // ==================== إنشاء غرفة ====================
+        async function createRoom() {
+            const maxPlayers = parseInt(document.getElementById('maxPlayers').value);
+            const gameMode = document.getElementById('gameMode').value;
+            
+            if (maxPlayers < 3 || maxPlayers > 10) {
+                showAlert('⚠️ عدد اللاعبين يجب أن يكون بين 3 و 10', 'error');
+                return;
+            }
+            
+            showLoading();
+            
+            // إنشاء كود عشوائي 4 أرقام
+            let roomCode = Math.floor(1000 + Math.random() * 9000).toString();
+            
+            // التحقق من عدم وجود الغرفة
+            const snapshot = await database.ref(`rooms/${roomCode}`).once('value');
+            if (snapshot.exists()) {
+                roomCode = Math.floor(1000 + Math.random() * 9000).toString();
+            }
+            
+            const roomData = {
+                code: roomCode,
+                host: currentPlayer.name,
+                maxPlayers: maxPlayers,
+                mode: gameMode,
+                players: [currentPlayer.name],
+                playersData: [{ name: currentPlayer.name, isHost: true }],
+                gameStarted: false,
+                roundEnded: false,
+                secretWord: '',
+                spyName: '',
+                votes: {},
+                createdAt: Date.now()
+            };
+            
+            await database.ref(`rooms/${roomCode}`).set(roomData);
+            
+            currentPlayer.roomCode = roomCode;
+            currentPlayer.isHost = true;
+            gameState.mode = gameMode;
+            
+            hideLoading();
+            enterGameRoom(roomCode);
+            showAlert(`✅ تم إنشاء الغرفة! كود الغرفة: ${roomCode}`, 'success');
+        }
+        
+        // ==================== انضمام إلى غرفة ====================
+        async function joinRoom() {
+            const roomCode = document.getElementById('roomCodeJoin').value.trim();
+            
+            if (!roomCode || roomCode.length !== 4) {
+                showAlert('❌ كود الغرفة يجب أن يكون 4 أرقام', 'error');
+                return;
+            }
+            
+            showLoading();
+            
+            const snapshot = await database.ref(`rooms/${roomCode}`).once('value');
+            const room = snapshot.val();
+            
+            if (!room) {
+                hideLoading();
+                showAlert('❌ الغرفة غير موجودة', 'error');
+                return;
+            }
+            
+            if (room.players.length >= room.maxPlayers) {
+                hideLoading();
+                showAlert('❌ الغرفة ممتلئة', 'error');
+                return;
+            }
+            
+            if (room.gameStarted) {
+                hideLoading();
+                showAlert('❌ اللعبة بدأت بالفعل', 'error');
+                return;
+            }
+            
+            if (room.players.includes(currentPlayer.name)) {
+                hideLoading();
+                showAlert('❌ هذا الاسم موجود بالفعل في الغرفة', 'error');
+                return;
+            }
+            
+            // إضافة اللاعب
+            const newPlayers = [...room.players, currentPlayer.name];
+            const newPlayersData = [...room.playersData, { name: currentPlayer.name, isHost: false }];
+            
+            await database.ref(`rooms/${roomCode}`).update({
+                players: newPlayers,
+                playersData: newPlayersData
+            });
+            
+            currentPlayer.roomCode = roomCode;
+            currentPlayer.isHost = false;
+            gameState.mode = room.mode;
+            
+            hideLoading();
+            enterGameRoom(roomCode);
+            showAlert(`✅ انضممت إلى الغرفة ${roomCode}`, 'success');
+        }
+        
+        // ==================== دخول غرفة اللعبة ====================
+        function enterGameRoom(roomCode) {
+            document.getElementById('gameScreen').classList.add('active');
+            document.getElementById('createScreen').classList.remove('active');
+            document.getElementById('joinScreen').classList.remove('active');
+            document.getElementById('startScreen').classList.remove('active');
+            
+            document.getElementById('roomCodeDisplay').textContent = roomCode;
+            
+            // الاستماع لتحديثات الغرفة
+            if (roomListener) roomListener.off();
+            roomListener = database.ref(`rooms/${roomCode}`);
+            roomListener.on('value', (snapshot) => {
+                const room = snapshot.val();
+                if (room) {
+                    updateGameState(room);
+                } else {
+                    showAlert('❌ تم حذف الغرفة', 'error');
+                    backToStart();
+                }
+            });
+            
+            // الاستماع للدردشة
+            if (chatListener) chatListener.off();
+            chatListener = database.ref(`chats/${roomCode}`);
+            chatListener.on('child_added', (snapshot) => {
+                const chat = snapshot.val();
+                addChatMessageUI(chat.sender, chat.message, chat.type);
+            });
+        }
+        
+        // ==================== تحديث حالة اللعبة ====================
+        function updateGameState(room) {
+            gameState.players = room.players || [];
+            gameState.playersData = room.playersData || [];
+            gameState.started = room.gameStarted || false;
+            gameState.mode = room.mode;
+            gameState.secretWord = room.secretWord;
+            gameState.spyName = room.spyName;
+            gameState.roundEnded = room.roundEnded;
+            gameState.votes = room.votes || {};
+            
+            // تحديث بيانات اللاعب الحالي
+            const myData = gameState.playersData.find(p => p.name === currentPlayer.name);
+            if (myData) {
+                currentPlayer.isHost = myData.isHost;
+                currentPlayer.isSpy = (currentPlayer.name === gameState.spyName);
+                if (gameState.secretWord && !currentPlayer.isSpy) {
+                    currentPlayer.secretWord = gameState.secretWord;
+                }
+            }
+            
+            updatePlayersList();
+            updateGameUI();
+        }
+        
+        // ==================== تحديث قائمة اللاعبين ====================
+        function updatePlayersList() {
+            const container = document.getElementById('playersContainer');
+            container.innerHTML = '';
+            
+            gameState.playersData.forEach(player => {
+                const playerCard = document.createElement('div');
+                playerCard.className = 'player-card';
+                if (player.name === gameState.spyName && gameState.started) {
+                    playerCard.classList.add('spy');
+                }
+                if (player.isHost) {
+                    playerCard.classList.add('host');
+                }
+                
+                playerCard.innerHTML = `
+                    <div class="player-icon">${player.name === gameState.spyName && gameState.started ? '🕵️' : '👤'}</div>
+                    <div class="player-name">${player.name}</div>
+                    ${player.isHost ? '<div class="player-badge badge-host">👑 مضيف</div>' : ''}
+                    ${player.name === gameState.spyName && gameState.started ? '<div class="player-badge badge-spy">🕵️ جاسوس</div>' : ''}
+                `;
+                
+                container.appendChild(playerCard);
+            });
+            
+            const statusDiv = document.getElementById('gameStatus');
+            if (!gameState.started) {
+                statusDiv.innerHTML = `
+                    <div style="text-align: center; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px;">
+                        👥 اللاعبون: ${gameState.players.length}/${roomMaxPlayers()}
+                        ${gameState.players.length >= 3 ? '<br>✅ يمكن بدء اللعبة!' : '<br>⚠️ يحتاج إلى 3 لاعبين على الأقل'}
+                    </div>
+                `;
+                
+                // إظهار زر بدء اللعبة للمضيف فقط
+                const startBtn = document.getElementById('startGameBtn');
+                if (currentPlayer.isHost && !gameState.started && gameState.players.length >= 3) {
+                    startBtn.style.display = 'block';
+                } else {
+                    startBtn.style.display = 'none';
+                }
+            } else {
+                statusDiv.innerHTML = `
+                    <div style="text-align: center; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px;">
+                        🎮 اللعبة جارية...
+                    </div>
+                `;
+                document.getElementById('startGameBtn').style.display = 'none';
+            }
+        }
+        
+        function roomMaxPlayers() {
+            // نحتاج للحصول على maxPlayers من Firebase
+            return 10; // مؤقت
+        }
+        
+        // ==================== تحديث واجهة اللعبة ====================
+        function updateGameUI() {
+            const specialControls = document.getElementById('specialControls');
+            
+            if (!gameState.started || gameState.roundEnded) {
+                if (gameState.roundEnded) {
+                    specialControls.innerHTML += `
+                        <div style="margin-top: 20px; text-align: center;">
+                            ${currentPlayer.isHost ? '<button onclick="resetGame()" class="btn-success">🔄 جولة جديدة</button>' : '⏳ انتظر بدء جولة جديدة...'}
+                        </div>
+                    `;
+                }
+                return;
+            }
+            
+            if (gameState.mode === 'LOCAL') {
+                // الوضع المحلي
+                specialControls.innerHTML = `
+                    <div class="local-mode" style="text-align: center; padding: 20px; background: rgba(255,193,7,0.2); border-radius: 15px;">
+                        <h3>🎭 الوضع المحلي</h3>
+                        <div style="font-size: 32px; background: #000; padding: 20px; border-radius: 15px; margin: 20px auto; max-width: 300px; cursor: pointer;" 
+                             onclick="this.style.filter = this.style.filter === 'blur(10px)' ? 'none' : 'blur(10px)'">
+                            ${currentPlayer.isSpy ? '🕵️ أنت الجاسوس!' : gameState.secretWord}
+                        </div>
+                        <p style="color: #ffc107;">⚠️ اضغط على الكلمة لإخفائها/إظهارها</p>
+                    </div>
+                `;
+            } else {
+                // الوضع الأونلاين
+                if (currentPlayer.isSpy) {
+                    specialControls.innerHTML = `
+                        <div class="spy-message">
+                            🕵️ أنت الجاسوس! 🕵️
+                            <br>
+                            <small>تظاهر أنك تعرف المكان وحاول اكتشافه من الأسئلة!</small>
+                            <br>
+                            <button onclick="guessWord()" class="btn-success" style="margin-top: 10px;">🔍 تخمين المكان</button>
+                        </div>
+                    `;
+                } else {
+                    specialControls.innerHTML = `
+                        <div class="secret-word">
+                            🔐 كلمتك السرية: ${gameState.secretWord}
+                        </div>
+                        <p style="text-align: center; color: #ffc107;">⚠️ لا تخبر أحداً بهذه الكلمة!</p>
+                    `;
+                }
+                
+                // إضافة أزرار التصويت إذا لم تنته الجولة
+                if (!gameState.roundEnded && !gameState.votes[currentPlayer.name]) {
+                    addVoteButtons();
+                }
+            }
+        }
+        
+        // ==================== بدء اللعبة ====================
+        async function startGame() {
+            if (!currentPlayer.isHost) return;
+            if (gameState.players.length < 3) {
+                showAlert('⚠️ تحتاج إلى 3 لاعبين على الأقل', 'error');
+                return;
+            }
+            
+            // اختيار كلمة سرية
+            const secretWord = SECRET_WORDS[Math.floor(Math.random() * SECRET_WORDS.length)];
+            
+            // اختيار جاسوس عشوائي
+            const randomIndex = Math.floor(Math.random() * gameState.players.length);
+            const spyName = gameState.players[randomIndex];
+            
+            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                gameStarted: true,
+                roundEnded: false,
+                secretWord: secretWord,
+                spyName: spyName,
+                votes: {}
+            });
+            
+            addSystemMessage(`🎮 بدأت اللعبة! ${gameState.mode === 'ONLINE' ? 'استخدموا الدردشة للأسئلة' : 'العبوا شفاهياً!'}`);
+            addSystemMessage(`🔍 عدد اللاعبين: ${gameState.players.length} | هناك جاسوس واحد بينكم!`);
+        }
+        
+        // ==================== أزرار التصويت ====================
+        function addVoteButtons() {
+            const specialControls = document.getElementById('specialControls');
+            const buttonsHtml = `
+                <div style="margin-top: 20px;">
+                    <h3>🗳️ التصويت على الجاسوس</h3>
+                    <div class="vote-buttons">
+                        ${gameState.players.map(p => `
+                            <button class="vote-btn" onclick="voteFor('${p}')">🗳️ ${p}</button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            specialControls.innerHTML += buttonsHtml;
+        }
+        
+        // ==================== التصويت ====================
+        async function voteFor(votedPlayer) {
+            if (gameState.roundEnded) {
+                showAlert('⚠️ انتهت الجولة', 'error');
+                return;
+            }
+            if (gameState.votes[currentPlayer.name]) {
+                showAlert('⚠️ لقد صوت مسبقاً', 'error');
+                return;
+            }
+            
+            const newVotes = { ...gameState.votes, [currentPlayer.name]: votedPlayer };
+            await database.ref(`rooms/${currentPlayer.roomCode}/votes`).set(newVotes);
+            addSystemMessage(`🗳️ ${currentPlayer.name} صوت على ${votedPlayer}`);
+            
+            // التحقق من اكتمال التصويت
+            if (Object.keys(newVotes).length === gameState.players.length) {
+                resolveVote(newVotes);
+            }
+        }
+        
+        // ==================== حل نتيجة التصويت ====================
+        async function resolveVote(votes) {
+            // حساب عدد الأصوات
+            const voteCount = {};
+            for (const voted of Object.values(votes)) {
+                voteCount[voted] = (voteCount[voted] || 0) + 1;
+            }
+            
+            let mostVoted = null;
+            let maxVotes = 0;
+            for (const [player, count] of Object.entries(voteCount)) {
+                if (count > maxVotes) {
+                    maxVotes = count;
+                    mostVoted = player;
+                }
+            }
+            
+            if (mostVoted === gameState.spyName) {
+                addSystemMessage(`🎉 اللاعبون فازوا! الجاسوس ${gameState.spyName} تم كشفه! المكان كان: ${gameState.secretWord}`, 'winner');
+                await database.ref(`rooms/${currentPlayer.roomCode}`).update({ roundEnded: true });
+            } else {
+                addSystemMessage(`❌ لم يتم كشف الجاسوس! تم إقصاء ${mostVoted} خطأً`);
+                
+                // إزالة اللاعب المُقصى
+                const newPlayers = gameState.players.filter(p => p !== mostVoted);
+                const newPlayersData = gameState.playersData.filter(p => p.name !== mostVoted);
+                
+                await database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                    players: newPlayers,
+                    playersData: newPlayersData,
+                    votes: {}
+                });
+                
+                if (newPlayers.length === 1 && newPlayers[0] === gameState.spyName) {
+                    addSystemMessage(`😈 الجاسوس ${gameState.spyName} فاز (بقي وحده)! المكان كان: ${gameState.secretWord}`, 'spy');
+                    await database.ref(`rooms/${currentPlayer.roomCode}`).update({ roundEnded: true });
+                }
+            }
+        }
+        
+        // ==================== تخمين الجاسوس ====================
+        async function guessWord() {
+            const guessed = prompt('🔍 ما هو المكان الذي تعتقد أنه الكلمة السرية؟');
+            if (!guessed) return;
+            
+            if (guessed === gameState.secretWord) {
+                addSystemMessage(`😈 الجاسوس ${currentPlayer.name} فاز! المكان كان: ${gameState.secretWord}`, 'spy');
+                await database.ref(`rooms/${currentPlayer.roomCode}`).update({ roundEnded: true });
+            } else {
+                showAlert('❌ تخمين خاطئ! حاول مرة أخرى', 'error');
+            }
+        }
+        
+        // ==================== إعادة تعيين ====================
+        async function resetGame() {
+            if (!currentPlayer.isHost) return;
+            
+            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                gameStarted: false,
+                roundEnded: false,
+                secretWord: '',
+                spyName: '',
+                votes: {}
+            });
+            
+            document.getElementById('specialControls').innerHTML = '';
+            addSystemMessage('🔄 تم إعادة تعيين اللعبة! اضغط بدء للعب جولة جديدة');
+        }
+        
+        // ==================== مغادرة الغرفة ====================
+        async function leaveRoom() {
+            if (!confirm('هل تريد مغادرة الغرفة؟')) return;
+            
+            // إزالة اللاعب من الغرفة
+            const newPlayers = gameState.players.filter(p => p !== currentPlayer.name);
+            const newPlayersData = gameState.playersData.filter(p => p.name !== currentPlayer.name);
+            
+            // إذا كان المضيف يغادر، اختر مضيفاً جديداً
+            let updateData = { players: newPlayers, playersData: newPlayersData };
+            if (currentPlayer.isHost && newPlayersData.length > 0) {
+                updateData.host = newPlayersData[0].name;
+                updateData.playersData = newPlayersData.map((p, i) => ({ ...p, isHost: i === 0 }));
+            }
+            
+            await database.ref(`rooms/${currentPlayer.roomCode}`).update(updateData);
+            
+            // إذا كانت الغرفة فارغة، احذفها
+            if (newPlayers.length === 0) {
+                await database.ref(`rooms/${currentPlayer.roomCode}`).remove();
+            }
+            
+            backToStart();
+        }
+        
+        // ==================== الدردشة ====================
+        function sendChat() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            const chatData = {
+                sender: currentPlayer.name,
+                message: message,
+                type: 'normal',
+                timestamp: Date.now()
+            };
+            
+            database.ref(`chats/${currentPlayer.roomCode}`).push(chatData);
+            input.value = '';
+        }
+        
+        function addChatMessageUI(sender, message, type) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        function addSystemMessage(message, type = 'system') {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.innerHTML = `📢 ${message}`;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            // حفظ في Firebase
+            if (currentPlayer.roomCode) {
+                database.ref(`chats/${currentPlayer.roomCode}`).push({
+                    sender: 'النظام',
+                    message: message,
+                    type: type,
+                    timestamp: Date.now()
+                });
+            }
+        }
+        
+        // ==================== أدوات ====================
+        function copyRoomCode() {
+            const code = document.getElementById('roomCodeDisplay').textContent;
+            navigator.clipboard.writeText(code);
+            showAlert('📋 تم نسخ كود الغرفة!', 'success');
+        }
+        
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            document.body.appendChild(alert);
+            setTimeout(() => alert.remove(), 3000);
+        }
+        
+        function showLoading() {
+            // يمكن إضافة مؤشر تحميل
+        }
+        
+        function hideLoading() {
+            // إخفاء مؤشر التحميل
+        }
+        
+        // التحقق من الاسم عند التحميل
+        validateName();
+    </script>
+</body>
+</html>
