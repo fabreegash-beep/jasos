@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>🕵️ لعبة المحتال - النسخة الجزائرية</title>
+    <title>🕵️ لعبة الدخيل - النسخة الجزائرية</title>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
     </script>
@@ -728,19 +728,168 @@
         .spy-waiting-message p {
             color: #ddd;
         }
+
+        .suggestion-reveal-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+
+        .suggestion-reveal-list .suggestion-item {
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1), rgba(79, 172, 254, 0.05));
+            border-color: #4facfe;
+        }
+
+        .suggestion-done {
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .suggestion-waiting {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        .send-suggestions-btn {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .send-suggestions-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.5);
+        }
+
+        .send-suggestions-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .spy-timer-large {
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 0, 0, 0.2);
+            border-radius: 20px;
+            border: 3px solid #ff4444;
+            margin: 15px 0;
+            animation: pulse 0.5s infinite;
+        }
+
+        .spy-timer-large.urgent {
+            color: #ff4444;
+            animation: pulse 0.3s infinite;
+        }
+
+        /* ===== لوحة ملخص الجولة ===== */
+        .summary-card {
+            max-width: 650px;
+        }
+
+        .summary-section {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .summary-section h3 {
+            color: #ffd89b;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .summary-log-item {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin: 6px 0;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .summary-empty {
+            text-align: center;
+            color: #aaa;
+            font-size: 13px;
+            padding: 6px;
+        }
+
+        .summary-positive {
+            color: #4facfe;
+            font-weight: bold;
+        }
+
+        .summary-negative {
+            color: #ff8888;
+            font-weight: bold;
+        }
+
+        .summary-neutral {
+            color: #ccc;
+        }
+
+        /* ===== إشعار الإرسال التلقائي ===== */
+        .auto-send-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 30px 50px;
+            border-radius: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            z-index: 6000;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 20px 60px rgba(79, 172, 254, 0.5);
+            text-align: center;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .auto-send-notification .sub {
+            font-size: 16px;
+            font-weight: normal;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+
+        .auto-send-notification .icon {
+            font-size: 50px;
+            display: block;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div id="startScreen" class="screen active">
             <div class="card">
-                <h1>🕵️ لعبة المحتال 🎭</h1>
+                <h1>🕵️ لعبة الدخيل 🎭</h1>
                 <div style="text-align: center; margin-bottom: 30px;">
                     <p style="font-size: 18px;">🎮 لعبة التخمين والأسئلة الممتعة بالثقافة والكلمات الجزائرية!</p>
-                    <p style="margin-top: 10px;">👥 الجميع يمكنه أن يكون محتالاً - لكن لا أحد يعرف هوية المحتال!</p>
+                    <p style="margin-top: 10px;">👥 الجميع يعرف الكلمة ما عدا الدخيل!</p>
                     <p>🏆 الهدف: أول من يصل إلى <strong style="color: #ffd700; font-size: 24px;">70 نقطة</strong> يفوز!</p>
-                    <p>📌 تصويت صحيح +10 | خطأ -5 | تخمين محتال صحيح +10 | خطأ -5</p>
-                    <p style="color: #ffc107;">🕵️ المحتال مخفي - فقط المحتال يعرف أنه محتال!</p>
+                    <p>📌 تصويت صحيح +10 | خطأ -5 | تخمين دخيل صحيح +10 | خطأ -5</p>
+                    <p>📌 2+ يصوتون على بريء → البريء -5 | 3+ يصوتون على الدخيل → الدخيل -5</p>
+                    <p>📌 صوت الدخيل لا يحتسب في التصويت!</p>
+                    <p style="color: #ffc107;">🕵️ الدخيل مخفي - فقط الدخيل لا يعرف الكلمة!</p>
                 </div>
                 <div id="nameSection">
                     <input type="text" id="playerName" placeholder="👤 أدخل اسمك (مطلوب)" maxlength="20">
@@ -800,7 +949,7 @@
                         <h3>🎮 تحكم المضيف</h3>
                         <div class="btn-group">
                             <button id="startGameBtn" onclick="startGame()">🎮 بدء اللعبة</button>
-                            <button id="changeWordBtn" onclick="changeSecretWord()" class="btn-warning" style="display: none;">🔄 تغيير الكلمة</button>
+                            <button id="changeWordBtn" onclick="changeSecretWord()" class="btn-warning" style="display: none;">🔄 تغيير الكلمة والدخيل</button>
                             <button id="openVoteBtn" onclick="openVoting()" style="display: none; background: linear-gradient(135deg, #f39c12, #e67e22);">🗳️ بدء التصويت</button>
                             <button id="nextRoundBtn" onclick="startNextRound()" style="display: none;" class="btn-success">🔄 الجولة التالية</button>
                         </div>
@@ -824,8 +973,9 @@
 
     <div id="voteModal" class="vote-modal" style="display: none;">
         <div class="vote-card">
-            <h2 style="text-align: center; color: #ffd700; margin-bottom: 10px;">🗳️ من تعتقد أنه المحتال؟</h2>
+            <h2 style="text-align: center; color: #ffd700; margin-bottom: 10px;">🗳️ من تعتقد أنه الدخيل؟</h2>
             <p style="text-align: center; margin-bottom: 15px; font-size: 14px; color: #eee;">اضغط على اسم اللاعب الذي تشك به لتقديم صوتك:</p>
+            <p style="text-align: center; margin-bottom: 10px; font-size: 12px; color: #ff8888;">⚠️ صوت الدخيل لا يحتسب!</p>
             <div id="voteOptionsContainer"></div>
         </div>
     </div>
@@ -840,21 +990,47 @@
         </div>
     </div>
 
-    <!-- نافذة عرض الاقتراحات واختيار المحتال -->
-    <div id="showSuggestionsModal" class="vote-modal" style="display: none;">
-        <div class="vote-card" style="border-color: #ffd700;">
-            <h2 style="text-align: center; color: #ffd700; margin-bottom: 10px;">📋 جميع الاقتراحات</h2>
+    <!-- نافذة عرض الاقتراحات لجميع اللاعبين (عدا الدخيل) -->
+    <div id="liveSuggestionsModal" class="vote-modal" style="display: none;">
+        <div class="vote-card" style="border-color: #4facfe; max-width: 600px;">
+            <h2 style="text-align: center; color: #4facfe; margin-bottom: 10px;">📝 اقتراحات اللاعبين</h2>
             <p style="text-align: center; margin-bottom: 10px; font-size: 14px; color: #eee;">
-                الكلمة الصحيحة موجودة بين الاقتراحات 🎯
+                الاقتراحات التي كتبها اللاعبون تظهر هنا فوراً
             </p>
-            <div id="timerDisplay" class="timer-display" style="display: none;">
-                ⏱️ <span id="timerSeconds">10</span> ثانية
+            <div id="liveSuggestionsList" class="suggestion-reveal-list"></div>
+            <div class="progress-bar" style="margin-top: 10px;">
+                <div id="liveProgressFill" class="progress-fill" style="width: 0%;"></div>
             </div>
-            <p id="spyHint" style="text-align: center; color: #ff6b6b; font-weight: bold; display: none;">
-                🕵️ أنت المحتال! اختر الكلمة التي تعتقد أنها الصحيحة
+            <p id="liveSuggestionsStatus" style="text-align: center; color: #aaa; margin-top: 5px;"></p>
+            
+            <!-- تم إزالة زر إرسال الاقتراحات - سيتم الإرسال تلقائياً -->
+            
+            <button onclick="closeLiveSuggestions()" class="btn-secondary" style="margin-top: 10px;">✖️ إغلاق</button>
+        </div>
+    </div>
+
+    <!-- نافذة عرض الاقتراحات للدخيل مع العد التنازلي -->
+    <div id="spySuggestionsModal" class="vote-modal" style="display: none;">
+        <div class="vote-card" style="border-color: #ff4444; max-width: 600px;">
+            <h2 style="text-align: center; color: #ff4444; margin-bottom: 10px;">🕵️ اختر الكلمة الصحيحة</h2>
+            <p style="text-align: center; margin-bottom: 10px; font-size: 14px; color: #eee;">
+                أنت الدخيل! اختر الكلمة التي تعتقد أنها الكلمة الصحيحة
             </p>
-            <div id="suggestionsGrid" class="suggestions-grid"></div>
-            <div id="suggestionsResult" style="text-align: center; margin-top: 15px;"></div>
+            <div id="spyTimerDisplay" class="spy-timer-large">
+                ⏱️ <span id="spyTimerSeconds">20</span> ثانية
+            </div>
+            <div id="spySuggestionsGrid" class="suggestions-grid"></div>
+            <div id="spySuggestionsResult" style="text-align: center; margin-top: 10px;"></div>
+        </div>
+    </div>
+
+    <!-- لوحة ملخص الجولة: تظهر مباشرة بعد اختيار الدخيل للكلمة -->
+    <div id="roundSummaryModal" class="vote-modal" style="display: none;">
+        <div class="vote-card summary-card">
+            <h2 style="text-align: center; color: #ffd700; margin-bottom: 5px;">📋 ملخص الجولة</h2>
+            <p style="text-align: center; font-size: 13px; color: #aaa; margin-bottom: 10px;">كل تحركات اللاعبين ونقاطهم في هذه الجولة</p>
+            <div id="roundSummaryContent"></div>
+            <button onclick="closeRoundSummary()" class="btn-success" style="margin-top: 15px;">👍 فهمت، متابعة</button>
         </div>
     </div>
 
@@ -873,15 +1049,18 @@
         const database = firebase.database();
 
         const TARGET_SCORE = 70;
+        const SPY_TIMER_DURATION = 20;
 
         let currentPlayer = { name: '', roomCode: '', isHost: false, isSpy: false, score: 0 };
         let gameState = {};
         let timerInterval = null;
+        let suggestionsListener = null;
 
         let roomListener = null;
         let chatListener = null;
+        let lastShownSummaryRoundId = null;
+        let autoSendInProgress = false;
 
-        // دالة تشغيل الصوت
         function playSound(type) {
             try {
                 const audioContext = new(window.AudioContext || window.webkitAudioContext)();
@@ -938,32 +1117,96 @@
                     oscillator.start();
                     gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.1);
                     oscillator.stop(audioContext.currentTime + 0.1);
+                } else if (type === 'auto-send') {
+                    oscillator.frequency.value = 880;
+                    gainNode.gain.value = 0.3;
+                    oscillator.type = 'sine';
+                    oscillator.start();
+                    setTimeout(() => {
+                        oscillator.frequency.value = 1108.73;
+                    }, 150);
+                    setTimeout(() => {
+                        oscillator.frequency.value = 1318.51;
+                    }, 300);
+                    gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.8);
+                    oscillator.stop(audioContext.currentTime + 0.8);
                 }
             } catch (e) {
                 console.log('Web Audio API not supported');
             }
         }
 
-       const CATEGORIZED_WORDS = [
-    ["مطعم", "مدرسة", "مطار", "مستشفى", "سوق", "قهوة", "مسجد", "صالة رياضية", "فندق", "محطة قطار", "متحف", "ملعب", "شاطئ", "مقهى", "مصنع", "مكتبة", "صيدلية", "ثانوية", "متوسطة", "ابتدائية", "جامعة", "إقامة", "حانوت", "مول", "كوشة", "قصابة", "خضار", "مارشي", "حمام", "سينما", "مسرح", "حديقة", "برج", "ساحة", "حي", "مدينة", "قرية", "مخبزة", "مقصلة", "مزرعة", "مخفر", "بلدي", "ولاية"],
-    ["زرودية", "بطاطا", "طاجين", "كسكسي", "شخشوخة", "مطلوع", "محاجب", "دوبارة", "بوراك", "حريرة", "شاورما", "كاشير", "زفيطي", "خبز الدار", "مقرود", "زلابية", "قلب اللوز", "رفيس", "طمينة", "بوقالة", "كران", "بنة", "قرعة", "لوبيا", "جلبانة", "عدس", "روز", "مقرونة", "رخسيس", "سردين", "مرقة", "فريت", "شطيطحة", "عصبان", "بولفاف", "براج", "غريبية", "بشار", "سميد", "فرينة", "خميرة", "زيت", "زبدة", "ملح", "سكر", "فلفل", "كمون", "قرفة", "معدنوس", "ثوم", "بيض", "جبن", "لحم", "دجاج", "سمك", "تون", "شوربة", "حساء", "مرقاز", "كفتة", "مخبوزات", "حلويات", "بقلاوة", "نخاعة", "مربى", "عسل", "تمر", "زبيب"],
-    ["حومة", "زنقة", "دار", "سطح", "كوزينة", "شرجم", "بيبان", "غرفة", "صالة", "حمام", "مطبخ", "باب", "شباك", "مرآب", "قبو", "سلم", "دهليز", "روف", "تراس", "بلكونة", "كراج", "بدروم"],
-    ["صباط", "سروال", "قندورة", "برنوس", "شاشية", "كاسكيطة", "جيب", "كارتابل", "ميدعة", "قشابية", "كسوة", "قميص", "بنطلون", "جاكيت", "معطف", "حذاء", "خف", "طاقية", "حزام", "نظارة", "فستان", "تنورة", "بدلة", "تيشيرت", "ببوش", "قرطاس", "منديل", "وشاح"],
-    ["طاكسي", "محطة", "رونبوان", "بابور", "طيارة", "كاميو", "موتور", "طوموبيل", "ديباناج", "ميكانيك", "بومبة", "رويدة", "فريم", "كابو", "بيرمي", "سيارة", "حافلة", "ترام", "قطار", "دراجة", "شاحنة", "قارب", "غواصة", "مروحية", "جرار", "آلة حصادة", "مقطورة", "عربة", "زلاجة"],
-    ["تلفاز", "تيليفون", "شارجور", "ويفي", "سماعات", "ميكروويف", "ثلاجة", "فور", "غسالة", "مروحة", "مكيف", "كهرباء", "مولد", "ضو", "حاسوب", "طابعة", "كاميرا", "راديو", "ساعة", "بطارية", "شاشة", "جهاز لوحي", "هاتف ذكي", "سماعة رأس", "مكبر صوت", "قمر صناعي", "رادار", "ليزر"],
-    ["غابة", "مسبح", "حديقة", "شمس", "ليل", "نهار", "فجر", "عشية", "ريح", "مطر", "ثلج", "رعد", "برق", "غيم", "ضباب", "صحراء", "جبل", "بحر", "نهر", "وادي", "كهف", "نخلة", "زهرة", "شجر", "نجم", "قمر", "كوكب", "مذنب", "بركان", "زلزال", "فيضان", "جفاف"],
-    ["شمة", "قازوز", "عصير", "ياوورت", "حليب", "قهوة بالحليب", "ماء", "ليموناد", "شاي", "دلاع", "برتقال", "تفاح", "موز", "عنب", "فراولة", "كرز", "مشمش", "خوخ", "كمثرى", "رمان", "كيوي", "أناناس", "مانجو", "بطيخ", "شمام", "جريب فروت", "ليمون", "نعناع", "زنجبيل"],
-    ["عرس", "حنة", "سبوع", "عيد", "رمضان", "صحور", "فطور", "تراويح", "لمة", "قعدة", "سهرية", "ميلاد", "زفاف", "ختان", "خطوبة", "نقاهة", "شهر العسل", "مأدبة", "وليمة", "عقيقة"],
-    ["فرشيطة", "طابلة", "كرسي", "سطل", "زرابي", "مخدة", "حاشية", "بونجة", "موس", "كوفيرطة", "طابونة", "كانون", "فحم", "خزانة", "رف", "مرآة", "سجادة", "ستارة", "وسادة", "كنبة", "أريكة", "طاولة", "مكتب", "كرسي هزاز", "خزينة", "شمعدان", "مزهرية"],
-    ["بريكول", "بالة", "كابة", "كاشي", "مفتاح", "نيفو", "بلاصا", "شيفون", "سيرفيت", "مقص", "سكوتش", "كارتون", "بلاستيك", "حديد", "خشب", "زجاج", "صباغة", "مارتو", "كلاو", "مسامير", "براغي", "مطرقة", "منشار", "مفك", "مثقاب", "صنفرة", "غراء", "شريط لاصق", "حبل", "سلك"],
-    ["فواكه", "ميزان", "ساشي", "كيس", "دراهم", "صرف", "بترول", "مازوط", "دخان", "ولاعة", "رماد", "صابون", "شامبو", "منشفة", "فرشاة", "مشط", "كريم", "عطر", "دهان", "طلاء", "ورنيش", "مذيب"],
-    ["بيرو", "ستيلو", "كراس", "طباشير", "سبورة", "ديفوار", "استاذ", "تلميذ", "نقطة", "عطلة", "امتحان", "كتاب", "ممحاة", "مسطرة", "حقيبة", "مقلمة", "قاموس", "موسوعة", "مجلة", "صحيفة", "دفتر", "مذكرة", "شهادة"],
-    ["حانوتي", "نجار", "حداد", "خباز", "طباخ", "حلاق", "خياط", "فلاح", "شرطي", "طبيب", "ممرض", "سائق", "مكتب", "مهندس", "معلم", "قاضي", "محامي", "صحفي", "كاتب", "شاعر", "رسام", "موسيقي", "ممثل", "مخرج", "طيار", "بحار", "جندي", "ضابط"],
-    ["رأس", "عين", "أنف", "فم", "أذن", "يد", "رجل", "ظهر", "صدر", "كتف", "ركبة", "إصبع", "شعر", "وجه", "جبهة", "ذقن", "رقبة", "كاحل", "معصم", "مرفق", "فخذ", "ساق", "قدم", "كف", "ظفر", "حاجب", "رموش", "شفة"],
-    ["أحمر", "أزرق", "أخضر", "أصفر", "أسود", "أبيض", "بني", "وردي", "برتقالي", "رمادي", "أرجواني", "ذهبي", "فضي", "نحاسي", "برونزي", "نيلي", "فيروزي", "مرجاني", "كستنائي", "زيتوني", "نيلي"],
-    ["قط", "كلب", "بقرة", "خروف", "دجاجة", "حصان", "حمار", "جمل", "أرنب", "فأر", "أسد", "نمر", "فيل", "زرافة", "قرد", "ذئب", "ثعلب", "غزال", "حمام", "نسر", "ببغاء", "عصفور", "بطريق", "نعامة", "تمساح", "سلحفاة", "ثعبان", "سحلية", "ضفدع", "سمكة قرش", "دلفين", "حوت"],
-    ["دينار", "سنتر", "دراهم", "محفظة", "نقود", "بطاقة", "فاتورة", "سعر", "بيع", "شراء", "ربح", "خسارة", "توفير", "استثمار", "قرض", "رهن", "ضمان", "تأمين", "ضريبة", "رسوم"]
-];
+        const CATEGORIZED_WORDS = [
+            ["مطعم", "مدرسة", "مطار", "مستشفى", "سوق", "قهوة", "مسجد", "صالة رياضية", "فندق", "محطة قطار", "متحف", "ملعب",
+                "شاطئ", "مقهى", "مصنع", "مكتبة", "صيدلية", "ثانوية", "متوسطة", "ابتدائية", "جامعة", "إقامة", "حانوت", "مول",
+                "كوشة", "قصابة", "خضار", "مارشي", "حمام", "سينما", "مسرح", "حديقة", "برج", "ساحة", "حي", "مدينة", "قرية",
+                "مخبزة", "مقصلة", "مزرعة", "مخفر", "بلدي", "ولاية"
+            ],
+            ["زرودية", "بطاطا", "طاجين", "كسكسي", "شخشوخة", "مطلوع", "محاجب", "دوبارة", "بوراك", "حريرة", "شاورما", "كاشير",
+                "زفيطي", "خبز الدار", "مقرود", "زلابية", "قلب اللوز", "رفيس", "طمينة", "بوقالة", "كران", "بنة", "قرعة",
+                "لوبيا", "جلبانة", "عدس", "روز", "مقرونة", "رخسيس", "سردين", "مرقة", "فريت", "شطيطحة", "عصبان", "بولفاف",
+                "براج", "غريبية", "بشار", "سميد", "فرينة", "خميرة", "زيت", "زبدة", "ملح", "سكر", "فلفل", "كمون", "قرفة",
+                "معدنوس", "ثوم", "بيض", "جبن", "لحم", "دجاج", "سمك", "تون", "شوربة", "حساء", "مرقاز", "كفتة", "مخبوزات",
+                "حلويات", "بقلاوة", "نخاعة", "مربى", "عسل", "تمر", "زبيب"
+            ],
+            ["حومة", "زنقة", "دار", "سطح", "كوزينة", "شرجم", "بيبان", "غرفة", "صالة", "حمام", "مطبخ", "باب", "شباك", "مرآب",
+                "قبو", "سلم", "دهليز", "روف", "تراس", "بلكونة", "كراج", "بدروم"
+            ],
+            ["صباط", "سروال", "قندورة", "برنوس", "شاشية", "كاسكيطة", "جيب", "كارتابل", "ميدعة", "قشابية", "كسوة", "قميص",
+                "بنطلون", "جاكيت", "معطف", "حذاء", "خف", "طاقية", "حزام", "نظارة", "فستان", "تنورة", "بدلة", "تيشيرت",
+                "ببوش", "قرطاس", "منديل", "وشاح"
+            ],
+            ["طاكسي", "محطة", "رونبوان", "بابور", "طيارة", "كاميو", "موتور", "طوموبيل", "ديباناج", "ميكانيك", "بومبة",
+                "رويدة", "فريم", "كابو", "بيرمي", "سيارة", "حافلة", "ترام", "قطار", "دراجة", "شاحنة", "قارب", "غواصة",
+                "مروحية", "جرار", "آلة حصادة", "مقطورة", "عربة", "زلاجة"
+            ],
+            ["تلفاز", "تيليفون", "شارجور", "ويفي", "سماعات", "ميكروويف", "ثلاجة", "فور", "غسالة", "مروحة", "مكيف", "كهرباء",
+                "مولد", "ضو", "حاسوب", "طابعة", "كاميرا", "راديو", "ساعة", "بطارية", "شاشة", "جهاز لوحي", "هاتف ذكي",
+                "سماعة رأس", "مكبر صوت", "قمر صناعي", "رادار", "ليزر"
+            ],
+            ["غابة", "مسبح", "حديقة", "شمس", "ليل", "نهار", "فجر", "عشية", "ريح", "مطر", "ثلج", "رعد", "برق", "غيم", "ضباب",
+                "صحراء", "جبل", "بحر", "نهر", "وادي", "كهف", "نخلة", "زهرة", "شجر", "نجم", "قمر", "كوكب", "مذنب", "بركان",
+                "زلزال", "فيضان", "جفاف"
+            ],
+            ["شمة", "قازوز", "عصير", "ياوورت", "حليب", "قهوة بالحليب", "ماء", "ليموناد", "شاي", "دلاع", "برتقال", "تفاح",
+                "موز", "عنب", "فراولة", "كرز", "مشمش", "خوخ", "كمثرى", "رمان", "كيوي", "أناناس", "مانجو", "بطيخ", "شمام",
+                "جريب فروت", "ليمون", "نعناع", "زنجبيل"
+            ],
+            ["عرس", "حنة", "سبوع", "عيد", "رمضان", "صحور", "فطور", "تراويح", "لمة", "قعدة", "سهرية", "ميلاد", "زفاف", "ختان",
+                "خطوبة", "نقاهة", "شهر العسل", "مأدبة", "وليمة", "عقيقة"
+            ],
+            ["فرشيطة", "طابلة", "كرسي", "سطل", "زرابي", "مخدة", "حاشية", "بونجة", "موس", "كوفيرطة", "طابونة", "كانون", "فحم",
+                "خزانة", "رف", "مرآة", "سجادة", "ستارة", "وسادة", "كنبة", "أريكة", "طاولة", "مكتب", "كرسي هزاز", "خزينة",
+                "شمعدان", "مزهرية"
+            ],
+            ["بريكول", "بالة", "كابة", "كاشي", "مفتاح", "نيفو", "بلاصا", "شيفون", "سيرفيت", "مقص", "سكوتش", "كارتون",
+                "بلاستيك", "حديد", "خشب", "زجاج", "صباغة", "مارتو", "كلاو", "مسامير", "براغي", "مطرقة", "منشار", "مفك",
+                "مثقاب", "صنفرة", "غراء", "شريط لاصق", "حبل", "سلك"
+            ],
+            ["فواكه", "ميزان", "ساشي", "كيس", "دراهم", "صرف", "بترول", "مازوط", "دخان", "ولاعة", "رماد", "صابون", "شامبو",
+                "منشفة", "فرشاة", "مشط", "كريم", "عطر", "دهان", "طلاء", "ورنيش", "مذيب"
+            ],
+            ["بيرو", "ستيلو", "كراس", "طباشير", "سبورة", "ديفوار", "استاذ", "تلميذ", "نقطة", "عطلة", "امتحان", "كتاب",
+                "ممحاة", "مسطرة", "حقيبة", "مقلمة", "قاموس", "موسوعة", "مجلة", "صحيفة", "دفتر", "مذكرة", "شهادة"
+            ],
+            ["حانوتي", "نجار", "حداد", "خباز", "طباخ", "حلاق", "خياط", "فلاح", "شرطي", "طبيب", "ممرض", "سائق", "مكتب",
+                "مهندس", "معلم", "قاضي", "محامي", "صحفي", "كاتب", "شاعر", "رسام", "موسيقي", "ممثل", "مخرج", "طيار", "بحار",
+                "جندي", "ضابط"
+            ],
+            ["رأس", "عين", "أنف", "فم", "أذن", "يد", "رجل", "ظهر", "صدر", "كتف", "ركبة", "إصبع", "شعر", "وجه", "جبهة",
+                "ذقن", "رقبة", "كاحل", "معصم", "مرفق", "فخذ", "ساق", "قدم", "كف", "ظفر", "حاجب", "رموش", "شفة"
+            ],
+            ["أحمر", "أزرق", "أخضر", "أصفر", "أسود", "أبيض", "بني", "وردي", "برتقالي", "رمادي", "أرجواني", "ذهبي", "فضي",
+                "نحاسي", "برونزي", "نيلي", "فيروزي", "مرجاني", "كستنائي", "زيتوني", "نيلي"
+            ],
+            ["قط", "كلب", "بقرة", "خروف", "دجاجة", "حصان", "حمار", "جمل", "أرنب", "فأر", "أسد", "نمر", "فيل", "زرافة",
+                "قرد", "ذئب", "ثعلب", "غزال", "حمام", "نسر", "ببغاء", "عصفور", "بطريق", "نعامة", "تمساح", "سلحفاة", "ثعبان",
+                "سحلية", "ضفدع", "سمكة قرش", "دلفين", "حوت"
+            ],
+            ["دينار", "سنتر", "دراهم", "محفظة", "نقود", "بطاقة", "فاتورة", "سعر", "بيع", "شراء", "ربح", "خسارة", "توفير",
+                "استثمار", "قرض", "رهن", "ضمان", "تأمين", "ضريبة", "رسوم"
+            ]
+        ];
 
         const SECRET_WORDS = [...new Set(CATEGORIZED_WORDS.flat())];
 
@@ -1006,14 +1249,19 @@
             document.getElementById('joinScreen').classList.remove('active');
             document.getElementById('gameScreen').classList.remove('active');
             document.getElementById('suggestionModal').style.display = 'none';
-            document.getElementById('showSuggestionsModal').style.display = 'none';
+            document.getElementById('liveSuggestionsModal').style.display = 'none';
+            document.getElementById('spySuggestionsModal').style.display = 'none';
             document.getElementById('voteModal').style.display = 'none';
+            document.getElementById('roundSummaryModal').style.display = 'none';
             if (roomListener) { roomListener.off();
                 roomListener = null; }
             if (chatListener) { chatListener.off();
                 chatListener = null; }
+            if (suggestionsListener) { suggestionsListener.off();
+                suggestionsListener = null; }
             if (timerInterval) { clearInterval(timerInterval);
                 timerInterval = null; }
+            autoSendInProgress = false;
         }
 
         async function createRoom() {
@@ -1034,6 +1282,8 @@
                 spyName: '',
                 votes: {},
                 scores: { [currentPlayer.name]: 0 },
+                scoresAtRoundStart: { [currentPlayer.name]: 0 },
+                roundId: null,
                 gameWinner: null,
                 votingOpen: false,
                 suggestionsPhase: false,
@@ -1044,6 +1294,8 @@
                 timerStarted: false,
                 timerEnd: null,
                 displayedSuggestions: [],
+                suggestionsSentToSpy: false,
+                spyTimerStarted: false,
                 createdAt: Date.now()
             };
 
@@ -1116,6 +1368,18 @@
                 const chat = snapshot.val();
                 addChatMessageUI(chat.sender, chat.message, chat.type);
             });
+
+            if (suggestionsListener) suggestionsListener.off();
+            suggestionsListener = database.ref(`rooms/${roomCode}/suggestions`);
+            suggestionsListener.on('value', (snapshot) => {
+                const suggestions = snapshot.val() || {};
+                if (gameState.suggestionsPhase && !currentPlayer.isSpy) {
+                    updateLiveSuggestions(suggestions);
+                }
+                if (gameState.suggestionsSentToSpy && currentPlayer.isSpy) {
+                    showSpySuggestions(suggestions);
+                }
+            });
         }
 
         function updateGameState(room) {
@@ -1140,7 +1404,6 @@
             updateScoresUI();
             updateGameUI();
 
-            // التصويت
             if (gameState.votingOpen && !gameState.roundEnded && !gameState.suggestionsPhase && !gameState.suggestionsRevealed) {
                 const votes = gameState.votes || {};
                 if (votes[currentPlayer.name] === undefined) {
@@ -1152,23 +1415,31 @@
                 document.getElementById('voteModal').style.display = 'none';
             }
 
-            // مرحلة كتابة الاقتراحات
             if (gameState.suggestionsPhase && !gameState.roundEnded && !gameState.suggestionsRevealed) {
                 document.getElementById('voteModal').style.display = 'none';
+                document.getElementById('spySuggestionsModal').style.display = 'none';
                 showSuggestionModal();
             } else {
                 document.getElementById('suggestionModal').style.display = 'none';
             }
 
-            // مرحلة عرض الاقتراحات واختيار المحتال
-            if (gameState.suggestionsRevealed && !gameState.roundEnded && !gameState.spyChose) {
+            if (gameState.suggestionsSentToSpy && !gameState.roundEnded && !gameState.spyChose) {
                 document.getElementById('suggestionModal').style.display = 'none';
-                document.getElementById('voteModal').style.display = 'none';
-                showSuggestionsAndSpyChoice();
-            } else if (gameState.spyChose || gameState.roundEnded) {
-                document.getElementById('showSuggestionsModal').style.display = 'none';
+                document.getElementById('liveSuggestionsModal').style.display = 'none';
+                if (currentPlayer.isSpy) {
+                    showSpySuggestions(gameState.suggestions || {});
+                }
+            }
+
+            if (gameState.spyChose || gameState.roundEnded) {
+                document.getElementById('spySuggestionsModal').style.display = 'none';
                 if (timerInterval) { clearInterval(timerInterval);
                     timerInterval = null; }
+            }
+
+            if (gameState.roundEnded && gameState.roundId && gameState.roundId !== lastShownSummaryRoundId) {
+                lastShownSummaryRoundId = gameState.roundId;
+                showRoundSummaryModal();
             }
 
             if (gameState.gameWinner) {
@@ -1203,7 +1474,7 @@
                     <div class="player-icon">👤</div>
                     <div class="player-name">${player.name} ${hasVoted && gameState.votingOpen ? '🗳️' : ''} ${hasSuggested && gameState.suggestionsPhase ? '📝' : ''}</div>
                     ${player.isHost ? '<div class="player-badge badge-host">👑 مضيف</div>' : ''}
-                    ${(gameState.roundEnded && player.name === gameState.spyName) ? '<div class="player-badge badge-spy">🕵️ كان محتالاً</div>' : ''}
+                    ${(gameState.roundEnded && player.name === gameState.spyName) ? '<div class="player-badge badge-spy">🕵️ كان دخيلاً</div>' : ''}
                     <div class="player-score">⭐ ${gameState.scores[player.name] || 0} نقطة</div>
                 `;
 
@@ -1224,7 +1495,7 @@
                     document.getElementById('openVoteBtn').style.display = 'none';
                     document.getElementById('nextRoundBtn').style.display = 'none';
                 } else if (gameState.gameStarted && !gameState.votingOpen && !gameState.roundEnded && !gameState.suggestionsPhase &&
-                    !gameState.suggestionsRevealed) {
+                    !gameState.suggestionsRevealed && !gameState.suggestionsSentToSpy) {
                     document.getElementById('startGameBtn').style.display = 'none';
                     document.getElementById('changeWordBtn').style.display = 'block';
                     document.getElementById('openVoteBtn').style.display = 'block';
@@ -1273,21 +1544,17 @@
             }
 
             if (gameState.suggestionsPhase && !gameState.roundEnded && !gameState.suggestionsRevealed) {
+                const normalPlayers = gameState.players.filter(p => p !== gameState.spyName);
+                const submitted = Object.keys(gameState.suggestions || {}).length;
                 statusDiv.innerHTML = `
                     <div class="card" style="text-align: center; border: 2px solid #4facfe;">
                         <h3 style="color: #4facfe;">📝 مرحلة كتابة الاقتراحات</h3>
                         <p style="margin-top: 10px; color: #eee;">اللاعبون يكتبون اقتراحاتهم للكلمة السرية...</p>
-                        <p style="color: #aaa; margin-top: 5px;">${Object.keys(gameState.suggestions || {}).length}/${gameState.players.filter(p => p !== gameState.spyName).length} لاعب كتب اقتراحه</p>
-                    </div>`;
-                return;
-            }
-
-            if (gameState.suggestionsRevealed && !gameState.roundEnded && !gameState.spyChose) {
-                statusDiv.innerHTML = `
-                    <div class="card" style="text-align: center; border: 2px solid #ffd700;">
-                        <h3 style="color: #ffd700;">📋 الاقتراحات ظهرت!</h3>
-                        <p style="margin-top: 10px; color: #eee;">${currentPlayer.isSpy ? '🕵️ اختر الكلمة الصحيحة!' : '👀 المحتال يختار الكلمة الآن...'}</p>
-                        ${currentPlayer.isSpy ? '<p style="color: #ff6b6b;">⚠️ لديك 10 ثوانٍ للاختيار!</p>' : ''}
+                        <p style="color: #aaa; margin-top: 5px;">${submitted}/${normalPlayers.length} لاعب كتب اقتراحه</p>
+                        <div class="progress-bar" style="margin-top: 10px;">
+                            <div class="progress-fill" style="width: ${normalPlayers.length > 0 ? (submitted / normalPlayers.length) * 100 : 0}%;"></div>
+                        </div>
+                        ${!currentPlayer.isSpy ? '<p style="color: #4facfe; margin-top: 5px;">💡 اقتراحات اللاعبين تظهر لك فوراً</p>' : '<p style="color: #ff6b6b; margin-top: 5px;">🕵️ الدخيل لا يرى الاقتراحات حتى ترسل تلقائياً</p>'}
                     </div>`;
                 return;
             }
@@ -1296,9 +1563,10 @@
                 if (currentPlayer.isSpy) {
                     statusDiv.innerHTML = `
                         <div class="spy-private-card">
-                            <h2>🕵️ أنت المحتال في هذه الجولة!</h2>
+                            <h2>🕵️ أنت الدخيل في هذه الجولة!</h2>
                             <p style="margin-top: 10px; font-size: 16px;">الهدف: تصرّف بطبيعية، وحاول معرفة الكلمة السرية من كلامهم دون أن يكشفوك!</p>
-                            <p style="margin-top: 15px; font-size: 14px; color: #ffc107;">⚠️ تذكير: لا أحد يعرف أنك المحتال إلا أنت!</p>
+                            <p style="margin-top: 15px; font-size: 14px; color: #ffc107;">⚠️ تذكير: لا أحد يعرف أنك الدخيل إلا أنت!</p>
+                            <p style="margin-top: 10px; font-size: 14px; color: #4facfe;">⏳ بانتظار إرسال الاقتراحات تلقائياً...</p>
                         </div>`;
                 } else {
                     statusDiv.innerHTML = `
@@ -1313,13 +1581,408 @@
                 statusDiv.innerHTML = `
                     <div class="card" style="text-align: center; background: rgba(0,0,0,0.4);">
                         <h2 style="color: #ff4444;">🎯 انتهت الجولة الحالية!</h2>
-                        <p style="font-size: 20px; margin: 10px 0;">المحتال الحقيقي كان هو: <strong>${gameState.spyName}</strong></p>
+                        <p style="font-size: 20px; margin: 10px 0;">الدخيل الحقيقي كان هو: <strong>${gameState.spyName}</strong></p>
                         <p style="font-size: 18px; color: #4facfe;">الكلمة السرية كانت: <strong>${gameState.secretWord}</strong></p>
-                        ${gameState.spyChoice ? `<p style="font-size: 16px; margin-top: 10px;">اختيار المحتال: <strong>${gameState.spyChoice}</strong> - ${spyResult}</p>` : '<p style="font-size: 16px; color: #ff6b6b; margin-top: 10px;">⏱️ لم يختر المحتال في الوقت المحدد!</p>'}
+                        ${gameState.spyChoice ? `<p style="font-size: 16px; margin-top: 10px;">اختيار الدخيل: <strong>${gameState.spyChoice}</strong> - ${spyResult}</p>` : '<p style="font-size: 16px; color: #ff6b6b; margin-top: 10px;">⏱️ لم يختر الدخيل في الوقت المحدد!</p>'}
                         <p style="margin-top: 15px; color: #aaa; font-size: 14px;">(بانتظار ضغط المضيف على الجولة التالية لمواصلة التحدي)</p>
                     </div>`;
             }
         }
+
+        // ========== لوحة ملخص الجولة ==========
+
+        function showRoundSummaryModal() {
+            const spyName = gameState.spyName;
+            const secretWord = gameState.secretWord;
+            const spyChoice = gameState.spyChoice;
+            const spySucceeded = spyChoice && spyChoice === secretWord;
+
+            const votes = gameState.votes || {};
+            const suggestions = gameState.suggestions || {};
+            const scoresStart = gameState.scoresAtRoundStart || {};
+            const scoresNow = gameState.scores || {};
+            const players = gameState.players || [];
+
+            let resultHTML = `
+                <div class="summary-section">
+                    <h3>🎯 نتيجة الجولة</h3>
+                    <div class="summary-log-item"><span>🕵️ الدخيل كان:</span> <strong>${spyName}</strong></div>
+                    <div class="summary-log-item"><span>📍 الكلمة السرية:</span> <strong>${secretWord}</strong></div>
+                    <div class="summary-log-item">
+                        <span>🎲 اختيار الدخيل:</span>
+                        <strong class="${spyChoice ? (spySucceeded ? 'summary-positive' : 'summary-negative') : 'summary-negative'}">
+                            ${spyChoice ? `${spyChoice} - ${spySucceeded ? '✅ نجح (+10)' : '❌ فشل (-5)'}` : '⏱️ لم يختر في الوقت المحدد (-5)'}
+                        </strong>
+                    </div>
+                </div>`;
+
+            let votesHTML = `<div class="summary-section"><h3>🗳️ من صوّت على من</h3>`;
+            const voteEntries = Object.entries(votes);
+            const filteredVotes = voteEntries.filter(([voter]) => voter !== spyName);
+            
+            if (filteredVotes.length === 0) {
+                votesHTML += `<div class="summary-empty">لم يجرِ تصويت في هذه الجولة</div>`;
+            } else {
+                filteredVotes.forEach(([voter, target]) => {
+                    const isTargetSpy = target === spyName;
+                    votesHTML += `
+                        <div class="summary-log-item">
+                            <span>👤 <strong>${voter}</strong> صوّت على <strong>${target}</strong></span>
+                            <span class="${isTargetSpy ? 'summary-positive' : 'summary-neutral'}">${isTargetSpy ? '🕵️ كان الدخيل' : '❌ بريء'}</span>
+                        </div>`;
+                });
+                if (votes[spyName]) {
+                    votesHTML += `
+                        <div class="summary-log-item" style="color: #ff8888; font-size: 12px;">
+                            ⚠️ صوت الدخيل (${spyName}) لم يتم احتسابه
+                        </div>`;
+                }
+            }
+            votesHTML += `</div>`;
+
+            let suggestionsHTML = `<div class="summary-section"><h3>📝 اقتراحات اللاعبين</h3>`;
+            const suggestionEntries = Object.entries(suggestions);
+            if (suggestionEntries.length === 0) {
+                suggestionsHTML += `<div class="summary-empty">لا توجد اقتراحات مسجّلة</div>`;
+            } else {
+                suggestionEntries.forEach(([player, word]) => {
+                    suggestionsHTML += `
+                        <div class="summary-log-item">
+                            <span>✍️ <strong>${player}</strong> اقترح:</span>
+                            <span>"${word}"</span>
+                        </div>`;
+                });
+            }
+            suggestionsHTML += `</div>`;
+
+            let scoresHTML = `<div class="summary-section"><h3>⭐ النقاط في هذه الجولة</h3>`;
+            players.forEach(player => {
+                const before = scoresStart[player] || 0;
+                const after = scoresNow[player] || 0;
+                const diff = after - before;
+                let diffLabel;
+                let diffClass;
+                if (diff > 0) {
+                    diffLabel = `+${diff}`;
+                    diffClass = 'summary-positive';
+                } else if (diff < 0) {
+                    diffLabel = `${diff}`;
+                    diffClass = 'summary-negative';
+                } else {
+                    diffLabel = 'بدون تغيير';
+                    diffClass = 'summary-neutral';
+                }
+                const isSpy = player === spyName;
+                scoresHTML += `
+                    <div class="summary-log-item">
+                        <span>${player} ${isSpy ? '🕵️' : ''}</span>
+                        <span class="${diffClass}">${diffLabel}</span>
+                        <span class="summary-neutral">(المجموع: ${after})</span>
+                    </div>`;
+            });
+            scoresHTML += `</div>`;
+
+            document.getElementById('roundSummaryContent').innerHTML = resultHTML + votesHTML + suggestionsHTML + scoresHTML;
+            document.getElementById('roundSummaryModal').style.display = 'flex';
+        }
+
+        function closeRoundSummary() {
+            document.getElementById('roundSummaryModal').style.display = 'none';
+        }
+
+        // ========== عرض الاقتراحات فوراً لغير الدخيل ==========
+
+        function updateLiveSuggestions(suggestions) {
+            if (currentPlayer.isSpy) return;
+
+            const modal = document.getElementById('liveSuggestionsModal');
+            const list = document.getElementById('liveSuggestionsList');
+            const progressFill = document.getElementById('liveProgressFill');
+            const status = document.getElementById('liveSuggestionsStatus');
+
+            const normalPlayers = gameState.players.filter(p => p !== gameState.spyName);
+            const submitted = Object.keys(suggestions || {}).length;
+
+            list.innerHTML = '';
+            Object.entries(suggestions || {}).forEach(([player, word]) => {
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.innerHTML = `
+                    <div style="font-size: 18px; font-weight: bold;">${word}</div>
+                    <span class="player-name-tag">✍️ ${player}</span>
+                `;
+                list.appendChild(item);
+            });
+
+            const progress = normalPlayers.length > 0 ? (submitted / normalPlayers.length) * 100 : 0;
+            progressFill.style.width = `${progress}%`;
+            status.textContent = `${submitted} / ${normalPlayers.length} لاعب كتب اقتراحه`;
+
+            // التحقق من اكتمال الاقتراحات وإرسالها تلقائياً
+            if (submitted === normalPlayers.length && normalPlayers.length > 0 && !autoSendInProgress) {
+                autoSendInProgress = true;
+                setTimeout(() => {
+                    sendSuggestionsToSpy();
+                }, 800);
+            }
+
+            if (submitted > 0 && gameState.suggestionsPhase) {
+                modal.style.display = 'flex';
+            } else if (submitted === 0 && gameState.suggestionsPhase) {
+                modal.style.display = 'flex';
+                list.innerHTML = '<p style="text-align: center; color: #aaa; padding: 20px;">⏳ بانتظار كتابة الاقتراحات...</p>';
+            }
+        }
+
+        function closeLiveSuggestions() {
+            document.getElementById('liveSuggestionsModal').style.display = 'none';
+        }
+
+        // ========== إرسال الاقتراحات إلى الدخيل (تلقائياً) ==========
+
+        async function sendSuggestionsToSpy() {
+            if (!gameState.suggestionsPhase) return;
+            if (gameState.suggestionsSentToSpy) return;
+
+            const normalPlayers = gameState.players.filter(p => p !== gameState.spyName);
+            const submitted = Object.keys(gameState.suggestions || {}).length;
+
+            if (submitted < normalPlayers.length) {
+                autoSendInProgress = false;
+                return;
+            }
+
+            showAutoSendNotification();
+            playSound('auto-send');
+
+            const suggestions = { ...gameState.suggestions };
+            const allWords = [...Object.values(suggestions)];
+            if (!allWords.includes(gameState.secretWord)) {
+                allWords.push(gameState.secretWord);
+            }
+            allWords.sort(() => 0.5 - Math.random());
+
+            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                suggestionsPhase: false,
+                suggestionsSentToSpy: true,
+                displayedSuggestions: allWords,
+                spyTimerStarted: false,
+                timerEnd: null,
+                spyChose: false,
+                spyChoice: null
+            });
+
+            document.getElementById('liveSuggestionsModal').style.display = 'none';
+
+            sendSystemMessage(`📤 تم إرسال الاقتراحات تلقائياً إلى الدخيل! ${gameState.spyName} لديه ${SPY_TIMER_DURATION} ثانية لاختيار الكلمة الصحيحة.`);
+            showAlert(`📤 تم إرسال الاقتراحات إلى الدخيل تلقائياً!`, 'success');
+
+            autoSendInProgress = false;
+
+            if (currentPlayer.isSpy) {
+                showSpySuggestions(suggestions);
+            }
+        }
+
+        function showAutoSendNotification() {
+            const existing = document.querySelector('.auto-send-notification');
+            if (existing) existing.remove();
+
+            const div = document.createElement('div');
+            div.className = 'auto-send-notification';
+            div.innerHTML = `
+                <span class="icon">📤</span>
+                تم إرسال الاقتراحات تلقائياً!
+                <div class="sub">جميع اللاعبين كتبوا اقتراحاتهم 🎯</div>
+            `;
+            document.body.appendChild(div);
+
+            setTimeout(() => {
+                div.style.opacity = '0';
+                div.style.transition = 'opacity 0.8s ease';
+                setTimeout(() => div.remove(), 900);
+            }, 2500);
+        }
+
+        // ========== عرض الاقتراحات للدخيل مع العد التنازلي ==========
+
+        function showSpySuggestions(suggestions) {
+            if (!currentPlayer.isSpy) return;
+            if (gameState.spyChose || gameState.roundEnded) return;
+
+            const modal = document.getElementById('spySuggestionsModal');
+            const grid = document.getElementById('spySuggestionsGrid');
+            const timerDisplay = document.getElementById('spyTimerDisplay');
+            const timerSeconds = document.getElementById('spyTimerSeconds');
+
+            grid.innerHTML = '';
+
+            const allWords = gameState.displayedSuggestions || [];
+
+            allWords.forEach(word => {
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.innerHTML = `
+                    <div style="font-size: 20px; font-weight: bold;">${word}</div>
+                    <button class="spy-choice-btn" onclick="submitSpyChoice('${word.replace(/'/g, "\\'")}')">
+                        🎯 اختر
+                    </button>
+                `;
+                grid.appendChild(item);
+            });
+
+            if (!gameState.spyTimerStarted) {
+                startSpyTimer();
+            } else {
+                if (gameState.timerEnd) {
+                    const now = Date.now();
+                    const remaining = Math.max(0, Math.ceil((gameState.timerEnd - now) / 1000));
+                    timerSeconds.textContent = remaining;
+                    if (remaining <= 3 && remaining > 0) {
+                        timerDisplay.classList.add('urgent');
+                        playSound('timer');
+                    } else {
+                        timerDisplay.classList.remove('urgent');
+                    }
+                    if (remaining === 0) {
+                        timerDisplay.textContent = '⏱️ انتهى الوقت!';
+                    }
+                }
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        async function startSpyTimer() {
+            const endTime = Date.now() + SPY_TIMER_DURATION * 1000;
+
+            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                spyTimerStarted: true,
+                timerEnd: endTime
+            });
+
+            if (timerInterval) clearInterval(timerInterval);
+
+            timerInterval = setInterval(async () => {
+                const snapshot = await database.ref(`rooms/${currentPlayer.roomCode}`).once('value');
+                const room = snapshot.val();
+                if (!room || room.roundEnded || room.spyChose) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    return;
+                }
+
+                const now = Date.now();
+                const remaining = Math.max(0, Math.ceil((room.timerEnd - now) / 1000));
+
+                const secDisplay = document.getElementById('spyTimerSeconds');
+                if (secDisplay) {
+                    secDisplay.textContent = remaining;
+                }
+
+                const display = document.getElementById('spyTimerDisplay');
+                if (display) {
+                    if (remaining <= 3 && remaining > 0) {
+                        display.classList.add('urgent');
+                        if (remaining === 3 || remaining === 2 || remaining === 1) {
+                            playSound('timer');
+                        }
+                    } else {
+                        display.classList.remove('urgent');
+                    }
+                    if (remaining === 0) {
+                        display.textContent = '⏱️ انتهى الوقت!';
+                    }
+                }
+
+                if (remaining === 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    await handleSpyTimerEnd();
+                }
+            }, 1000);
+        }
+
+        async function handleSpyTimerEnd() {
+            if (gameState.spyChose || gameState.roundEnded) return;
+
+            const spyName = gameState.spyName;
+            const currentScores = { ...gameState.scores };
+
+            currentScores[spyName] = (currentScores[spyName] || 0) - 5;
+
+            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                scores: currentScores,
+                roundEnded: true,
+                spyChose: true,
+                spyChoice: null,
+                playersData: gameState.playersData.map(p => ({
+                    ...p,
+                    score: currentScores[p.name] || 0
+                }))
+            });
+
+            sendSystemMessage(`⏱️ انتهى الوقت! لم يختر الدخيل ${spyName} الكلمة وتم خصم 5 نقاط.`);
+            showAlert(`⏱️ انتهى الوقت! خصم 5 نقاط من الدخيل`, 'error');
+            playSound('error');
+            document.getElementById('spySuggestionsModal').style.display = 'none';
+        }
+
+        // ========== اختيار الدخيل للكلمة ==========
+
+        async function submitSpyChoice(selectedWord) {
+            if (!currentPlayer.isSpy) return;
+            if (gameState.spyChose || gameState.roundEnded) return;
+
+            if (timerInterval) { clearInterval(timerInterval);
+                timerInterval = null; }
+
+            const spyName = gameState.spyName;
+            const secretWord = gameState.secretWord;
+            const currentScores = { ...gameState.scores };
+
+            let isCorrect = selectedWord === secretWord;
+
+            if (isCorrect) {
+                currentScores[spyName] = (currentScores[spyName] || 0) + 10;
+                playSound('success');
+            } else {
+                currentScores[spyName] = (currentScores[spyName] || 0) - 5;
+                playSound('error');
+            }
+
+            let winner = null;
+            Object.entries(currentScores).forEach(([name, sc]) => {
+                if (sc >= TARGET_SCORE) {
+                    if (!winner || sc > currentScores[winner]) {
+                        winner = name;
+                    }
+                }
+            });
+
+            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                scores: currentScores,
+                roundEnded: true,
+                spyChose: true,
+                spyChoice: selectedWord,
+                gameWinner: winner,
+                playersData: gameState.playersData.map(p => ({
+                    ...p,
+                    score: currentScores[p.name] || 0
+                }))
+            });
+
+            const resultText = isCorrect ?
+                `🎯 نجح الدخيل ${spyName} في اختيار الكلمة الصحيحة [${secretWord}] وحصل على +10 نقاط.` :
+                `❌ فشل الدخيل ${spyName} في اختيار الكلمة الصحيحة [${secretWord}] وتم خصم 5 نقاط.`;
+
+            sendSystemMessage(resultText);
+            showAlert(isCorrect ? '✅ اختيار صحيح! +10 نقاط' : '❌ اختيار خاطئ! -5 نقاط', isCorrect ? 'success' : 'error');
+
+            document.getElementById('spySuggestionsModal').style.display = 'none';
+        }
+
+        // ========== تغيير الكلمة والدخيل ==========
 
         async function changeSecretWord() {
             if (!currentPlayer.isHost) return;
@@ -1333,74 +1996,53 @@
                 attempts++;
             }
 
-            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
-                secretWord: finalWord
-            });
-
-            sendSystemMessage(`🔄 قام المضيف بتغيير الكلمة السرية! كلمة جديدة.`);
-            showAlert(`✅ تم تغيير الكلمة السرية!`, 'info');
-            playSound('reveal');
-        }
-
-        async function kickPlayer(playerName) {
-            if (!currentPlayer.isHost) return;
-            if (playerName === currentPlayer.name) return;
-            if (!confirm(`هل أنت متأكد أنك تريد طرد اللاعب ${playerName} من الغرفة؟`)) return;
-
-            const updatedPlayers = gameState.players.filter(p => p !== playerName);
-            const updatedPlayersData = gameState.playersData.filter(p => p.name !== playerName);
-            const updatedScores = { ...gameState.scores };
-            delete updatedScores[playerName];
+            const allPlayers = [...gameState.players];
+            const randomIndex = Math.floor(Math.random() * allPlayers.length);
+            const newSpy = allPlayers[randomIndex];
 
             await database.ref(`rooms/${currentPlayer.roomCode}`).update({
-                players: updatedPlayers,
-                playersData: updatedPlayersData,
-                scores: updatedScores
-            });
-
-            sendSystemMessage(`🚫 تم طرد اللاعب ${playerName} من الغرفة بواسطة المضيف.`);
-            showAlert(`✅ تم طرد ${playerName}`, 'info');
-        }
-
-        async function startGame() {
-            if (gameState.players.length < 3) { showAlert('❌ لا يمكن اللعب بأقل من 3 لاعبين!', 'error'); return; }
-
-            const randomWord = SECRET_WORDS[Math.floor(Math.random() * SECRET_WORDS.length)];
-            const randomSpy = gameState.players[Math.floor(Math.random() * gameState.players.length)];
-
-            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
-                gameStarted: true,
+                secretWord: finalWord,
+                spyName: newSpy,
                 roundEnded: false,
-                spyName: randomSpy,
-                secretWord: randomWord,
-                votes: {},
-                votingOpen: false,
                 suggestionsPhase: false,
                 suggestions: {},
                 suggestionsRevealed: false,
+                suggestionsSentToSpy: false,
                 spyChose: false,
                 spyChoice: null,
-                timerStarted: false,
+                spyTimerStarted: false,
                 timerEnd: null,
-                displayedSuggestions: []
+                votes: {},
+                votingOpen: false,
+                displayedSuggestions: [],
+                scoresAtRoundStart: { ...gameState.scores },
+                roundId: Date.now()
             });
-            sendSystemMessage(`📢 بدأت جولة جديدة! الكلمة السرية جديدة.`);
+
+            sendSystemMessage(`🔄 قام المضيف بتغيير الكلمة السرية والدخيل! الدخيل الجديد هو: ${newSpy}`);
+            showAlert(`✅ تم تغيير الكلمة والدخيل! الدخيل الجديد: ${newSpy}`, 'info');
             playSound('reveal');
         }
 
+        // ========== التصويت ==========
+
         async function openVoting() {
+            autoSendInProgress = false;
             await database.ref(`rooms/${currentPlayer.roomCode}`).update({
                 votes: {},
                 votingOpen: true,
                 suggestionsPhase: false,
                 suggestionsRevealed: false,
+                suggestionsSentToSpy: false,
                 spyChose: false,
                 spyChoice: null,
-                timerStarted: false,
+                spyTimerStarted: false,
                 timerEnd: null,
-                displayedSuggestions: []
+                displayedSuggestions: [],
+                scoresAtRoundStart: { ...gameState.scores },
+                roundId: Date.now()
             });
-            sendSystemMessage(`🗳️ أطلق المضيف عملية التصويت! جميع اللاعبين يصوتون الآن على من يعتقدون أنه المحتال.`);
+            sendSystemMessage(`🗳️ أطلق المضيف عملية التصويت! جميع اللاعبين يصوتون الآن على من يعتقدون أنه الدخيل.`);
             playSound('vote');
         }
 
@@ -1436,33 +2078,71 @@
             }
         }
 
+        // ========== معالجة نتائج التصويت (القواعد الجديدة) ==========
+
         async function processVotingResults(currentRoomState) {
             const votes = currentRoomState.votes || {};
             const spyName = currentRoomState.spyName;
             const currentScores = { ...currentRoomState.scores };
 
-            // تحديث نقاط اللاعبين بناءً على التصويت
+            // حساب عدد الأصوات لكل لاعب (مع تجاهل صوت الدخيل)
+            const voteCount = {};
+            Object.entries(votes).forEach(([voter, target]) => {
+                if (voter === spyName) return; // ❌ تجاهل صوت الدخيل
+                voteCount[target] = (voteCount[target] || 0) + 1;
+            });
+
+            // معالجة نتائج التصويت لكل لاعب عادي (ليس الدخيل)
             currentRoomState.players.forEach(player => {
+                // تجاهل الدخيل - لا نطبق عليه قواعد التصويت
                 if (player === spyName) return;
 
                 const playerVote = votes[player];
-                if (playerVote === spyName) {
-                    currentScores[player] = (currentScores[player] || 0) + 10;
+                if (!playerVote) return;
+
+                const targetIsSpy = (playerVote === spyName);
+                const votesOnTarget = voteCount[playerVote] || 0;
+
+                // القاعدة 1: 2+ لاعبين يصوتون على بريء → البريء يخسر 5 نقاط
+                if (votesOnTarget >= 2 && !targetIsSpy) {
+                    currentScores[playerVote] = (currentScores[playerVote] || 0) - 5;
+                    sendSystemMessage(`📢 تم التصويت على ${playerVote} من قبل ${votesOnTarget} لاعبين! بما أنه ليس الدخيل، تم خصم 5 نقاط منه.`);
+                    showAlert(`📢 ${playerVote} خسر 5 نقاط (تصويت جماعي على بريء)`, 'info');
+                    playSound('error');
+                }
+
+                // القاعدة 2: 3+ لاعبين يصوتون على الدخيل → الدخيل يخسر 5 نقاط
+                if (votesOnTarget >= 3 && targetIsSpy) {
+                    currentScores[spyName] = (currentScores[spyName] || 0) - 5;
+                    sendSystemMessage(`📢 تم التصويت على الدخيل ${spyName} من قبل ${votesOnTarget} لاعبين! تم خصم 5 نقاط من الدخيل.`);
+                    showAlert(`📢 الدخيل ${spyName} خسر 5 نقاط (تصويت جماعي عليه)`, 'info');
+                    playSound('error');
+                }
+
+                // التصويت العادي (للاعبين العاديين فقط)
+                if (targetIsSpy) {
+                    // إذا صوّت على الدخيل بشكل صحيح (وليس تصويت جماعي 3+)
+                    if (votesOnTarget < 3) {
+                        currentScores[player] = (currentScores[player] || 0) + 10;
+                    }
                 } else {
-                    currentScores[player] = (currentScores[player] || 0) - 5;
+                    // إذا صوّت على بريء (وليس تصويت جماعي 2+)
+                    if (votesOnTarget < 2) {
+                        currentScores[player] = (currentScores[player] || 0) - 5;
+                    }
                 }
             });
 
-            // بدء مرحلة كتابة الاقتراحات
             await database.ref(`rooms/${currentPlayer.roomCode}`).update({
                 scores: currentScores,
                 votingOpen: false,
                 suggestionsPhase: true,
                 suggestions: {},
+                suggestionsSentToSpy: false,
                 suggestionsRevealed: false,
                 spyChose: false,
                 spyChoice: null,
-                timerStarted: false,
+                spyTimerStarted: false,
                 timerEnd: null,
                 displayedSuggestions: [],
                 playersData: currentRoomState.playersData.map(p => ({
@@ -1475,7 +2155,7 @@
             playSound('reveal');
         }
 
-        // ========== نظام الاقتراحات الجديد ==========
+        // ========== كتابة الاقتراحات ==========
 
         function showSuggestionModal() {
             const modal = document.getElementById('suggestionModal');
@@ -1483,29 +2163,27 @@
 
             const isSpy = currentPlayer.isSpy;
             const submitted = Object.keys(gameState.suggestions || {}).length;
-            // عدد اللاعبين العاديين (غير المحتال)
             const totalPlayers = gameState.players.filter(p => p !== gameState.spyName).length;
 
             if (isSpy) {
-                // المحتال لا يكتب اقتراحاً
                 content.innerHTML = `
                     <div class="spy-waiting-message">
-                        <h3>🕵️ أنت المحتال!</h3>
+                        <h3>🕵️ أنت الدخيل!</h3>
                         <p style="font-size: 18px; margin-top: 10px;">لا يمكنك كتابة اقتراح لأنك لا تعرف الكلمة السرية.</p>
                         <p style="margin-top: 15px; color: #ffc107;">⏳ انتظر حتى يكتب جميع اللاعبين اقتراحاتهم...</p>
                         <div class="progress-bar" style="margin-top: 15px;">
                             <div id="spyProgressFill" class="progress-fill" style="width: ${totalPlayers > 0 ? (submitted / totalPlayers) * 100 : 0}%;"></div>
                         </div>
                         <p style="margin-top: 5px; color: #aaa;">${submitted} / ${totalPlayers} لاعب كتب اقتراحه</p>
+                        <p style="margin-top: 10px; color: #ff6b6b;">🔒 الدخيل لا يرى اقتراحات اللاعبين حتى ترسل تلقائياً!</p>
                     </div>
                 `;
-                // تحديث التقدم للمحتال
                 const progressFill = document.getElementById('spyProgressFill');
                 if (progressFill) {
                     progressFill.style.width = `${totalPlayers > 0 ? (submitted / totalPlayers) * 100 : 0}%`;
                 }
+                document.getElementById('liveSuggestionsModal').style.display = 'none';
             } else {
-                // اللاعب العادي يكتب اقتراحاً
                 const hasSuggested = gameState.suggestions && gameState.suggestions[currentPlayer.name] !== undefined;
 
                 if (hasSuggested) {
@@ -1517,6 +2195,7 @@
                                 <div class="progress-fill" style="width: ${totalPlayers > 0 ? (submitted / totalPlayers) * 100 : 0}%;"></div>
                             </div>
                             <p style="margin-top: 5px; color: #aaa;">${submitted} / ${totalPlayers} لاعب كتب اقتراحه</p>
+                            <p style="margin-top: 10px; color: #4facfe;">💡 سيتم إرسال الاقتراحات تلقائياً عند اكتمالها</p>
                         </div>
                     `;
                 } else {
@@ -1535,12 +2214,15 @@
                             ${submitted} / ${totalPlayers} لاعب كتب اقتراحه
                         </p>
                         <div id="suggestionStatus" style="text-align: center; margin-top: 10px; color: #ffc107;"></div>
+                        <p style="text-align: center; color: #4facfe; margin-top: 5px;">💡 سيتم الإرسال تلقائياً عند اكتمال الاقتراحات</p>
                     `;
-                    // Focus on input
                     setTimeout(() => {
                         const input = document.getElementById('suggestionInput');
                         if (input) input.focus();
                     }, 300);
+                }
+                if (submitted > 0) {
+                    document.getElementById('liveSuggestionsModal').style.display = 'flex';
                 }
             }
 
@@ -1561,299 +2243,48 @@
                 return;
             }
 
-            // تأكيد أن اللاعب ليس محتالاً
             if (currentPlayer.isSpy) {
-                showAlert('❌ المحتال لا يمكنه كتابة اقتراح!', 'error');
+                showAlert('❌ الدخيل لا يمكنه كتابة اقتراح!', 'error');
                 return;
             }
 
-            // تأكيد عدم وجود اقتراح مسبق
             if (gameState.suggestions && gameState.suggestions[currentPlayer.name] !== undefined) {
                 showAlert('❌ لقد أرسلت اقتراحك بالفعل!', 'error');
                 return;
             }
 
-            // حفظ الاقتراح
             const suggestionsRef = database.ref(`rooms/${currentPlayer.roomCode}/suggestions/${currentPlayer.name}`);
             await suggestionsRef.set(suggestion);
 
             showAlert(`✅ تم إرسال اقتراحك: "${suggestion}"`, 'success');
             playSound('success');
 
-            // التحقق مما إذا كان جميع اللاعبين العاديين كتبوا اقتراحاتهم
+            const inputField = document.getElementById('suggestionInput');
+            if (inputField) {
+                inputField.disabled = true;
+                inputField.placeholder = '✅ تم إرسال اقتراحك';
+            }
+            const sendBtn = document.querySelector('#suggestionContent .suggestion-input-area button');
+            if (sendBtn) {
+                sendBtn.disabled = true;
+                sendBtn.textContent = '✅ تم الإرسال';
+            }
+
             const snapshot = await database.ref(`rooms/${currentPlayer.roomCode}`).once('value');
             const latestRoom = snapshot.val();
             const normalPlayers = latestRoom.players.filter(p => p !== latestRoom.spyName);
             const submitted = Object.keys(latestRoom.suggestions || {}).length;
 
             if (submitted === normalPlayers.length) {
-                // جميع اللاعبين العاديين كتبوا اقتراحاتهم → ننتقل إلى مرحلة العرض
-                await revealSuggestions(latestRoom);
-            } else {
-                // تحديث الواجهة
-                showSuggestionModal();
+                document.getElementById('suggestionModal').style.display = 'none';
+                updateLiveSuggestions(latestRoom.suggestions || {});
             }
         }
 
-        async function revealSuggestions(roomData) {
-            const secretWord = roomData.secretWord;
-            const suggestions = roomData.suggestions || {};
-
-            // نأخذ اقتراحات اللاعبين العاديين فقط
-            let allSuggestions = [...Object.values(suggestions)];
-
-            // نضيف الكلمة الصحيحة إلى الاقتراحات (مختلطة)
-            // نتحقق أنها غير موجودة بالفعل
-            if (!allSuggestions.includes(secretWord)) {
-                allSuggestions.push(secretWord);
-            }
-
-            // خلط الاقتراحات
-            allSuggestions.sort(() => 0.5 - Math.random());
-
-            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
-                suggestionsPhase: false,
-                suggestionsRevealed: true,
-                displayedSuggestions: allSuggestions,
-                timerStarted: false,
-                timerEnd: null,
-                spyChose: false,
-                spyChoice: null
-            });
-
-            sendSystemMessage(`📋 تم الكشف عن جميع الاقتراحات! ${roomData.spyName} لديه 10 ثوانٍ لاختيار الكلمة الصحيحة.`);
-            playSound('reveal');
-        }
-
-        function showSuggestionsAndSpyChoice() {
-            const modal = document.getElementById('showSuggestionsModal');
-            const grid = document.getElementById('suggestionsGrid');
-            const timerDisplay = document.getElementById('timerDisplay');
-            const timerSeconds = document.getElementById('timerSeconds');
-            const spyHint = document.getElementById('spyHint');
-
-            grid.innerHTML = '';
-
-            const suggestions = gameState.displayedSuggestions || [];
-            const isSpy = currentPlayer.isSpy;
-            const hasChosen = gameState.spyChose || false;
-
-            // عرض التلميح للمحتال
-            if (isSpy && !hasChosen && !gameState.roundEnded) {
-                spyHint.style.display = 'block';
-                spyHint.textContent = '🕵️ أنت المحتال! اختر الكلمة التي تعتقد أنها الصحيحة';
-                spyHint.style.color = '#ff6b6b';
-            } else if (isSpy && hasChosen) {
-                spyHint.style.display = 'block';
-                spyHint.textContent = '✅ لقد قمت بالاختيار!';
-                spyHint.style.color = '#4caf50';
-            } else {
-                spyHint.style.display = 'none';
-            }
-
-            // عرض الاقتراحات - بدون أي شارة أو إشارة للكلمة الصحيحة
-            suggestions.forEach(word => {
-                const item = document.createElement('div');
-                item.className = 'suggestion-item';
-
-                const wordText = document.createElement('div');
-                wordText.style.fontSize = '20px';
-                wordText.style.fontWeight = 'bold';
-                wordText.textContent = word;
-                item.appendChild(wordText);
-
-                // زر الاختيار يظهر فقط للمحتال إذا لم يختر بعد
-                if (isSpy && !hasChosen && !gameState.roundEnded) {
-                    const chooseBtn = document.createElement('button');
-                    chooseBtn.className = 'spy-choice-btn';
-                    chooseBtn.textContent = '🎯 اختر';
-                    chooseBtn.onclick = () => submitSpyChoice(word);
-                    item.appendChild(chooseBtn);
-                }
-
-                grid.appendChild(item);
-            });
-
-            // إدارة المؤقت للمحتال
-            if (isSpy && !hasChosen && !gameState.roundEnded) {
-                timerDisplay.style.display = 'block';
-
-                // بدء المؤقت إذا لم يبدأ بعد
-                if (!gameState.timerStarted) {
-                    startSpyTimer();
-                } else {
-                    // حساب الوقت المتبقي
-                    if (gameState.timerEnd) {
-                        const now = Date.now();
-                        const remaining = Math.max(0, Math.ceil((gameState.timerEnd - now) / 1000));
-                        timerSeconds.textContent = remaining;
-                        if (remaining <= 3 && remaining > 0) {
-                            timerDisplay.classList.add('urgent');
-                            playSound('timer');
-                        } else {
-                            timerDisplay.classList.remove('urgent');
-                        }
-                        if (remaining === 0) {
-                            timerDisplay.textContent = '⏱️ انتهى الوقت!';
-                        }
-                    }
-                }
-            } else if (!isSpy && !gameState.roundEnded) {
-                timerDisplay.style.display = 'block';
-                if (gameState.timerEnd) {
-                    const now = Date.now();
-                    const remaining = Math.max(0, Math.ceil((gameState.timerEnd - now) / 1000));
-                    timerSeconds.textContent = remaining;
-                    if (remaining <= 3 && remaining > 0) {
-                        timerDisplay.classList.add('urgent');
-                    } else {
-                        timerDisplay.classList.remove('urgent');
-                    }
-                    if (remaining === 0) {
-                        timerDisplay.textContent = '⏱️ انتهى الوقت!';
-                    }
-                } else {
-                    timerDisplay.textContent = '⏱️ ينتظر اختيار المحتال...';
-                }
-            } else {
-                timerDisplay.style.display = 'none';
-            }
-
-            modal.style.display = 'flex';
-        }
-
-        async function startSpyTimer() {
-            const timerDuration = 10;
-            const endTime = Date.now() + timerDuration * 1000;
-
-            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
-                timerStarted: true,
-                timerEnd: endTime
-            });
-
-            if (timerInterval) clearInterval(timerInterval);
-
-            timerInterval = setInterval(async () => {
-                const snapshot = await database.ref(`rooms/${currentPlayer.roomCode}`).once('value');
-                const room = snapshot.val();
-                if (!room || room.roundEnded || room.spyChose) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                    return;
-                }
-
-                const now = Date.now();
-                const remaining = Math.max(0, Math.ceil((room.timerEnd - now) / 1000));
-
-                const secDisplay = document.getElementById('timerSeconds');
-                if (secDisplay) {
-                    secDisplay.textContent = remaining;
-                }
-
-                const display = document.getElementById('timerDisplay');
-                if (display) {
-                    if (remaining <= 3 && remaining > 0) {
-                        display.classList.add('urgent');
-                        if (remaining === 3 || remaining === 2 || remaining === 1) {
-                            playSound('timer');
-                        }
-                    } else {
-                        display.classList.remove('urgent');
-                    }
-                    if (remaining === 0) {
-                        display.textContent = '⏱️ انتهى الوقت!';
-                    }
-                }
-
-                if (remaining === 0) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                    await handleTimerEnd();
-                }
-            }, 1000);
-        }
-
-        async function handleTimerEnd() {
-            if (gameState.spyChose || gameState.roundEnded) return;
-
-            const spyName = gameState.spyName;
-            const currentScores = { ...gameState.scores };
-
-            currentScores[spyName] = (currentScores[spyName] || 0) - 5;
-
-            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
-                scores: currentScores,
-                roundEnded: true,
-                spyChose: true,
-                spyChoice: null,
-                playersData: gameState.playersData.map(p => ({
-                    ...p,
-                    score: currentScores[p.name] || 0
-                }))
-            });
-
-            sendSystemMessage(`⏱️ انتهى الوقت! لم يختر المحتال ${spyName} الكلمة وتم خصم 5 نقاط.`);
-            playSound('error');
-        }
-
-        async function submitSpyChoice(selectedWord) {
-            if (!currentPlayer.isSpy) return;
-            if (gameState.spyChose || gameState.roundEnded) return;
-
-            if (timerInterval) { clearInterval(timerInterval);
-                timerInterval = null; }
-
-            const spyName = gameState.spyName;
-            const secretWord = gameState.secretWord;
-            const currentScores = { ...gameState.scores };
-
-            let isCorrect = selectedWord === secretWord;
-            let scoreChange = 0;
-
-            if (isCorrect) {
-                currentScores[spyName] = (currentScores[spyName] || 0) + 10;
-                scoreChange = 10;
-                playSound('success');
-            } else {
-                currentScores[spyName] = (currentScores[spyName] || 0) - 5;
-                scoreChange = -5;
-                playSound('error');
-            }
-
-            let winner = null;
-            Object.entries(currentScores).forEach(([name, sc]) => {
-                if (sc >= TARGET_SCORE) {
-                    if (!winner || sc > currentScores[winner]) {
-                        winner = name;
-                    }
-                }
-            });
-
-            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
-                scores: currentScores,
-                roundEnded: true,
-                spyChose: true,
-                spyChoice: selectedWord,
-                gameWinner: winner,
-                playersData: gameState.playersData.map(p => ({
-                    ...p,
-                    score: currentScores[p.name] || 0
-                }))
-            });
-
-            const resultText = isCorrect ?
-                `🎯 نجح المحتال ${spyName} في اختيار الكلمة الصحيحة [${secretWord}] وحصل على +10 نقاط.` :
-                `❌ فشل المحتال ${spyName} في اختيار الكلمة الصحيحة [${secretWord}] وتم خصم 5 نقاط.`;
-
-            sendSystemMessage(resultText);
-            showAlert(isCorrect ? '✅ اختيار صحيح! +10 نقاط' : '❌ اختيار خاطئ! -5 نقاط', isCorrect ? 'success' : 'error');
-
-            document.getElementById('showSuggestionsModal').style.display = 'none';
-        }
-
-        // ========== نهاية نظام الاقتراحات الجديد ==========
+        // ========== بدء الجولة التالية ==========
 
         async function startNextRound() {
+            autoSendInProgress = false;
             await database.ref(`rooms/${currentPlayer.roomCode}`).update({
                 gameStarted: false,
                 roundEnded: false,
@@ -1861,20 +2292,58 @@
                 suggestionsPhase: false,
                 suggestions: {},
                 suggestionsRevealed: false,
+                suggestionsSentToSpy: false,
                 spyChose: false,
                 spyChoice: null,
-                timerStarted: false,
+                spyTimerStarted: false,
                 timerEnd: null,
                 votes: {},
                 displayedSuggestions: []
             });
             if (timerInterval) { clearInterval(timerInterval);
                 timerInterval = null; }
+            document.getElementById('liveSuggestionsModal').style.display = 'none';
+            document.getElementById('spySuggestionsModal').style.display = 'none';
+            document.getElementById('roundSummaryModal').style.display = 'none';
             startGame();
             playSound('reveal');
         }
 
+        // ========== بدء اللعبة ==========
+
+        async function startGame() {
+            if (gameState.players.length < 3) { showAlert('❌ لا يمكن اللعب بأقل من 3 لاعبين!', 'error'); return; }
+
+            const randomWord = SECRET_WORDS[Math.floor(Math.random() * SECRET_WORDS.length)];
+            const randomSpy = gameState.players[Math.floor(Math.random() * gameState.players.length)];
+
+            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                gameStarted: true,
+                roundEnded: false,
+                spyName: randomSpy,
+                secretWord: randomWord,
+                votes: {},
+                votingOpen: false,
+                suggestionsPhase: false,
+                suggestions: {},
+                suggestionsRevealed: false,
+                suggestionsSentToSpy: false,
+                spyChose: false,
+                spyChoice: null,
+                spyTimerStarted: false,
+                timerEnd: null,
+                displayedSuggestions: [],
+                scoresAtRoundStart: { ...gameState.scores },
+                roundId: Date.now()
+            });
+            sendSystemMessage(`📢 بدأت جولة جديدة! الكلمة السرية جديدة.`);
+            playSound('reveal');
+        }
+
+        // ========== تصفير اللعبة ==========
+
         async function resetFullGame() {
+            autoSendInProgress = false;
             const initialScores = {};
             gameState.players.forEach(p => initialScores[p] = 0);
 
@@ -1886,17 +2355,45 @@
                 suggestionsPhase: false,
                 suggestions: {},
                 suggestionsRevealed: false,
+                suggestionsSentToSpy: false,
                 spyChose: false,
                 spyChoice: null,
-                timerStarted: false,
+                spyTimerStarted: false,
                 timerEnd: null,
                 votes: {},
                 displayedSuggestions: []
             });
             if (timerInterval) { clearInterval(timerInterval);
                 timerInterval = null; }
+            document.getElementById('liveSuggestionsModal').style.display = 'none';
+            document.getElementById('spySuggestionsModal').style.display = 'none';
+            document.getElementById('roundSummaryModal').style.display = 'none';
             startGame();
         }
+
+        // ========== طرد لاعب ==========
+
+        async function kickPlayer(playerName) {
+            if (!currentPlayer.isHost) return;
+            if (playerName === currentPlayer.name) return;
+            if (!confirm(`هل أنت متأكد أنك تريد طرد اللاعب ${playerName} من الغرفة؟`)) return;
+
+            const updatedPlayers = gameState.players.filter(p => p !== playerName);
+            const updatedPlayersData = gameState.playersData.filter(p => p.name !== playerName);
+            const updatedScores = { ...gameState.scores };
+            delete updatedScores[playerName];
+
+            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                players: updatedPlayers,
+                playersData: updatedPlayersData,
+                scores: updatedScores
+            });
+
+            sendSystemMessage(`🚫 تم طرد اللاعب ${playerName} من الغرفة بواسطة المضيف.`);
+            showAlert(`✅ تم طرد ${playerName}`, 'info');
+        }
+
+        // ========== الدردشة ==========
 
         function sendChat() {
             const input = document.getElementById('chatInput');
@@ -1938,6 +2435,8 @@
             }
             if (timerInterval) { clearInterval(timerInterval);
                 timerInterval = null; }
+            if (suggestionsListener) { suggestionsListener.off();
+                suggestionsListener = null; }
             backToStart();
         }
 
