@@ -204,9 +204,69 @@
             background: linear-gradient(135deg, #f39c12, #e67e22);
         }
 
+        .btn-reset {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        .btn-reset:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.5);
+        }
+
+        .btn-score-add {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+            padding: 4px 10px;
+            font-size: 14px;
+            margin: 2px;
+            width: auto;
+            min-width: 35px;
+        }
+
+        .btn-score-add:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-score-sub {
+            background: linear-gradient(135deg, #f44336, #c62828);
+            color: white;
+            padding: 4px 10px;
+            font-size: 14px;
+            margin: 2px;
+            width: auto;
+            min-width: 35px;
+        }
+
+        .btn-score-sub:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+        }
+
+        .score-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 6px;
+            padding: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .score-controls .btn-group-label {
+            font-size: 11px;
+            color: #aaa;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 2px;
+        }
+
         .players-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 15px;
             margin: 20px 0;
         }
@@ -230,6 +290,12 @@
         .player-card.revealed-spy {
             border-color: #ff4444;
             background: linear-gradient(135deg, rgba(255, 68, 68, 0.3), rgba(255, 68, 68, 0.1));
+        }
+
+        .player-card.inactive-player {
+            opacity: 0.5;
+            border-color: #888;
+            filter: grayscale(0.5);
         }
 
         .player-icon {
@@ -261,6 +327,11 @@
             color: white;
         }
 
+        .badge-inactive {
+            background: linear-gradient(135deg, #666, #444);
+            color: #aaa;
+        }
+
         .player-score {
             margin-top: 8px;
             font-size: 14px;
@@ -288,6 +359,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 10;
         }
 
         .kick-btn:hover {
@@ -842,6 +914,78 @@
             color: #ff4444;
             animation: pulse 0.3s infinite;
         }
+
+        .rejoin-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            padding: 30px 50px;
+            border-radius: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            z-index: 6000;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 20px 60px rgba(76, 175, 80, 0.5);
+            text-align: center;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .rejoin-notification .sub {
+            font-size: 16px;
+            font-weight: normal;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+
+        .rejoin-notification .icon {
+            font-size: 50px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .score-change-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            color: #1a1a2e;
+            padding: 25px 50px;
+            border-radius: 25px;
+            font-size: 26px;
+            font-weight: bold;
+            z-index: 5500;
+            animation: fadeInUp 0.4s ease;
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.4);
+            text-align: center;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .score-change-notification .sub {
+            font-size: 14px;
+            font-weight: normal;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .score-change-notification .icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .score-change-notification.positive {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+        }
+
+        .score-change-notification.negative {
+            background: linear-gradient(135deg, #f44336, #c62828);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -855,6 +999,7 @@
                     <p>🏆 الهدف: أول من يصل إلى <strong style="color: #ffd700; font-size: 24px;">70 نقطة</strong> يفوز!</p>
                     <p>📌 تصويت صحيح على الدخيل +10 | تصويت جماعي (شخصان أو أكثر) على بريء -5 له فقط | تخمين الدخيل صحيح +10 | خطأ -5</p>
                     <p style="color: #ffc107;">🕵️ الدخيل مخفي - فقط الدخيل لا يعرف الكلمة!</p>
+                    <p style="color: #4facfe; font-size: 14px;">👑 المضيف يمكنه تعديل نقاط اللاعبين يدوياً</p>
                 </div>
                 <div id="nameSection">
                     <input type="text" id="playerName" placeholder="👤 أدخل اسمك (مطلوب)" maxlength="20">
@@ -918,6 +1063,7 @@
                             <button id="openVoteBtn" onclick="openVoting()" style="display: none; background: linear-gradient(135deg, #f39c12, #e67e22);">🗳️ بدء التصويت</button>
                             <button id="nextRoundBtn" onclick="startNextRound()" style="display: none;" class="btn-success">🔄 الجولة التالية</button>
                             <button id="forceSendSuggestionsBtn" onclick="sendSuggestionsToSpy()" style="display: none;" class="btn-warning">📤 إرسال الاقتراحات إلى الدخيل الآن</button>
+                            <button id="resetPhaseBtn" onclick="resetPhase()" style="display: none;" class="btn-reset">🔄 إعادة ضبط المرحلة</button>
                         </div>
                     </div>
                 </div>
@@ -968,7 +1114,6 @@
             </div>
             <p id="liveSuggestionsStatus" style="text-align: center; color: #aaa; margin-top: 5px;"></p>
             
-            <!-- زر إرسال الاقتراحات إلى الدخيل (يظهر فقط للمضيف) -->
             <div id="hostSendSuggestions" style="display: none; margin-top: 15px;">
                 <button class="send-suggestions-btn" onclick="sendSuggestionsToSpy()">
                     📤 إرسال الاقتراحات إلى الدخيل
@@ -997,13 +1142,36 @@
         </div>
     </div>
 
-    <!-- لوحة ملخص الجولة: تظهر مباشرة بعد اختيار الدخيل للكلمة -->
+    <!-- لوحة ملخص الجولة -->
     <div id="roundSummaryModal" class="vote-modal" style="display: none;">
         <div class="vote-card summary-card">
             <h2 style="text-align: center; color: #ffd700; margin-bottom: 5px;">📋 ملخص الجولة</h2>
             <p style="text-align: center; font-size: 13px; color: #aaa; margin-bottom: 10px;">كل تحركات اللاعبين ونقاطهم في هذه الجولة</p>
             <div id="roundSummaryContent"></div>
             <button onclick="closeRoundSummary()" class="btn-success" style="margin-top: 15px;">👍 فهمت، متابعة</button>
+        </div>
+    </div>
+
+    <!-- نافذة تعديل النقاط (للمضيف) -->
+    <div id="scoreModal" class="vote-modal" style="display: none;">
+        <div class="vote-card" style="max-width: 450px;">
+            <h2 style="text-align: center; color: #ffd700; margin-bottom: 10px;">⭐ تعديل نقاط اللاعب</h2>
+            <p style="text-align: center; font-size: 14px; color: #eee; margin-bottom: 15px;">
+                <span id="scoreModalPlayerName"></span> - النقاط الحالية: <strong id="scoreModalCurrentScore">0</strong>
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button onclick="adjustScore(1)" class="btn-score-add" style="padding: 15px; font-size: 20px;">➕ +1</button>
+                <button onclick="adjustScore(-1)" class="btn-score-sub" style="padding: 15px; font-size: 20px;">➖ -1</button>
+                <button onclick="adjustScore(5)" class="btn-score-add" style="padding: 15px; font-size: 20px;">➕ +5</button>
+                <button onclick="adjustScore(-5)" class="btn-score-sub" style="padding: 15px; font-size: 20px;">➖ -5</button>
+                <button onclick="adjustScore(10)" class="btn-score-add" style="padding: 15px; font-size: 20px;">➕ +10</button>
+                <button onclick="adjustScore(-10)" class="btn-score-sub" style="padding: 15px; font-size: 20px;">➖ -10</button>
+            </div>
+            <div style="margin-top: 15px; display: flex; gap: 10px;">
+                <input type="number" id="customScoreInput" placeholder="قيمة مخصصة" style="flex: 1; margin: 0;">
+                <button onclick="adjustCustomScore()" class="btn-warning" style="width: auto; margin: 0; padding: 12px 20px;">تطبيق</button>
+            </div>
+            <button onclick="closeScoreModal()" class="btn-secondary" style="margin-top: 15px;">✖️ إغلاق</button>
         </div>
     </div>
 
@@ -1032,6 +1200,7 @@
         let roomListener = null;
         let chatListener = null;
         let lastShownSummaryRoundId = null;
+        let scoreModalTarget = null;
 
         function playSound(type) {
             try {
@@ -1089,6 +1258,39 @@
                     oscillator.start();
                     gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.1);
                     oscillator.stop(audioContext.currentTime + 0.1);
+                } else if (type === 'rejoin') {
+                    oscillator.frequency.value = 523.25;
+                    gainNode.gain.value = 0.3;
+                    oscillator.type = 'sine';
+                    oscillator.start();
+                    setTimeout(() => {
+                        oscillator.frequency.value = 659.25;
+                    }, 150);
+                    setTimeout(() => {
+                        oscillator.frequency.value = 783.99;
+                    }, 300);
+                    gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.8);
+                    oscillator.stop(audioContext.currentTime + 0.8);
+                } else if (type === 'score-up') {
+                    oscillator.frequency.value = 523.25;
+                    gainNode.gain.value = 0.3;
+                    oscillator.type = 'sine';
+                    oscillator.start();
+                    setTimeout(() => {
+                        oscillator.frequency.value = 659.25;
+                    }, 100);
+                    setTimeout(() => {
+                        oscillator.frequency.value = 783.99;
+                    }, 200);
+                    gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.6);
+                    oscillator.stop(audioContext.currentTime + 0.6);
+                } else if (type === 'score-down') {
+                    oscillator.frequency.value = 440;
+                    gainNode.gain.value = 0.3;
+                    oscillator.type = 'sawtooth';
+                    oscillator.start();
+                    gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.4);
+                    oscillator.stop(audioContext.currentTime + 0.4);
                 }
             } catch (e) {
                 console.log('Web Audio API not supported');
@@ -1211,6 +1413,8 @@
             document.getElementById('liveSuggestionsModal').style.display = 'none';
             document.getElementById('spySuggestionsModal').style.display = 'none';
             document.getElementById('voteModal').style.display = 'none';
+            document.getElementById('roundSummaryModal').style.display = 'none';
+            document.getElementById('scoreModal').style.display = 'none';
             if (roomListener) { roomListener.off();
                 roomListener = null; }
             if (chatListener) { chatListener.off();
@@ -1232,7 +1436,12 @@
                 maxPlayers: maxPlayers,
                 mode: gameMode,
                 players: [currentPlayer.name],
-                playersData: [{ name: currentPlayer.name, isHost: true, score: 0 }],
+                playersData: [{ 
+                    name: currentPlayer.name, 
+                    isHost: true, 
+                    score: 0,
+                    active: true 
+                }],
                 gameStarted: false,
                 roundEnded: false,
                 secretWord: '',
@@ -1253,6 +1462,7 @@
                 displayedSuggestions: [],
                 suggestionsSentToSpy: false,
                 spyTimerStarted: false,
+                isPhaseReset: false,
                 createdAt: Date.now()
             };
 
@@ -1265,6 +1475,8 @@
             playSound('success');
         }
 
+        // ========== دالة الانضمام (مع إعادة الانضمام) ==========
+
         async function joinRoom() {
             const roomCode = document.getElementById('roomCodeJoin').value.trim();
             if (!roomCode || roomCode.length !== 4) { showAlert('❌ كود الغرفة يجب أن يتكون من 4 أرقام', 'error'); return; }
@@ -1273,13 +1485,64 @@
             const room = snapshot.val();
 
             if (!room) { showAlert('❌ الغرفة غير موجودة', 'error'); return; }
-            if (room.players.length >= room.maxPlayers) { showAlert('❌ الغرفة ممتلئة بالكامل', 'error'); return; }
-            if (room.gameStarted && !room.roundEnded) { showAlert('❌ اللعبة بدأت بالفعل، انتظر انتهاء الجولة', 'error'); return; }
-            if (room.players.includes(currentPlayer.name)) { showAlert('❌ هذا الاسم مستخدم بالفعل داخل الغرفة', 'error'); return; }
+            
+            const activePlayers = room.players || [];
+            if (activePlayers.length >= room.maxPlayers) { 
+                showAlert('❌ الغرفة ممتلئة بالكامل', 'error'); 
+                return; 
+            }
+            
+            if (room.gameStarted && !room.roundEnded && !room.isPhaseReset) {
+                const existingPlayer = room.playersData.find(p => p.name === currentPlayer.name);
+                if (!existingPlayer) {
+                    showAlert('❌ الجولة قيد التقدم حالياً. لا يمكن للاعبين جدد الانضمام.', 'error');
+                    return;
+                }
+            }
+
+            const existingPlayerData = room.playersData.find(p => p.name === currentPlayer.name);
+            
+            if (existingPlayerData) {
+                if (room.players.includes(currentPlayer.name)) {
+                    showAlert('❌ هذا الاسم موجود بالفعل في الغرفة!', 'error');
+                    return;
+                }
+
+                const updatedPlayersData = room.playersData.map(p => {
+                    if (p.name === currentPlayer.name) {
+                        return { ...p, active: true };
+                    }
+                    return p;
+                });
+
+                const newPlayers = [...room.players, currentPlayer.name];
+                
+                await database.ref(`rooms/${roomCode}`).update({
+                    players: newPlayers,
+                    playersData: updatedPlayersData,
+                    isPhaseReset: false
+                });
+
+                currentPlayer.roomCode = roomCode;
+                currentPlayer.isHost = existingPlayerData.isHost || false;
+                currentPlayer.score = existingPlayerData.score || 0;
+                
+                enterGameRoom(roomCode);
+                
+                showRejoinNotification(currentPlayer.name);
+                sendSystemMessage(`🔄 عاد اللاعب ${currentPlayer.name} إلى الغرفة! (استعادة النقاط: ${currentPlayer.score})`);
+                playSound('rejoin');
+                showAlert(`✅ مرحباً بعودتك ${currentPlayer.name}! تم استعادة ${currentPlayer.score} نقطة`, 'success');
+                return;
+            }
 
             const newPlayers = [...room.players, currentPlayer.name];
-            const newPlayersData = [...room.playersData, { name: currentPlayer.name, isHost: false, score: room.scores[
-                    currentPlayer.name] || 0 }];
+            const newPlayersData = [...room.playersData, { 
+                name: currentPlayer.name, 
+                isHost: false, 
+                score: room.scores[currentPlayer.name] || 0,
+                active: true 
+            }];
 
             const newScores = { ...room.scores };
             if (newScores[currentPlayer.name] === undefined) {
@@ -1289,14 +1552,36 @@
             await database.ref(`rooms/${roomCode}`).update({
                 players: newPlayers,
                 playersData: newPlayersData,
-                scores: newScores
+                scores: newScores,
+                isPhaseReset: false
             });
 
             currentPlayer.roomCode = roomCode;
             currentPlayer.isHost = false;
+            currentPlayer.score = 0;
             enterGameRoom(roomCode);
             showAlert(`✅ تم الانضمام إلى الغرفة ${roomCode}`, 'success');
             playSound('success');
+        }
+
+        function showRejoinNotification(playerName) {
+            const existing = document.querySelector('.rejoin-notification');
+            if (existing) existing.remove();
+
+            const div = document.createElement('div');
+            div.className = 'rejoin-notification';
+            div.innerHTML = `
+                <span class="icon">🔄</span>
+                ${playerName} عاد إلى الغرفة!
+                <div class="sub">تم استعادة النقاط السابقة 🎯</div>
+            `;
+            document.body.appendChild(div);
+
+            setTimeout(() => {
+                div.style.opacity = '0';
+                div.style.transition = 'opacity 0.8s ease';
+                setTimeout(() => div.remove(), 900);
+            }, 3000);
         }
 
         function enterGameRoom(roomCode) {
@@ -1333,7 +1618,6 @@
                 if (gameState.suggestionsPhase && !currentPlayer.isSpy) {
                     updateLiveSuggestions(suggestions);
                 }
-                // إذا تم إرسال الاقتراحات إلى الدخيل
                 if (gameState.suggestionsSentToSpy && currentPlayer.isSpy) {
                     showSpySuggestions(suggestions);
                 }
@@ -1345,7 +1629,7 @@
 
             const myData = gameState.playersData.find(p => p.name === currentPlayer.name);
             if (myData) {
-                currentPlayer.isHost = myData.isHost;
+                currentPlayer.isHost = myData.isHost || false;
                 currentPlayer.score = gameState.scores[currentPlayer.name] || 0;
                 currentPlayer.isSpy = (currentPlayer.name === gameState.spyName);
             }
@@ -1362,7 +1646,6 @@
             updateScoresUI();
             updateGameUI();
 
-            // التصويت
             if (gameState.votingOpen && !gameState.roundEnded && !gameState.suggestionsPhase && !gameState.suggestionsRevealed) {
                 const votes = gameState.votes || {};
                 if (votes[currentPlayer.name] === undefined) {
@@ -1374,7 +1657,6 @@
                 document.getElementById('voteModal').style.display = 'none';
             }
 
-            // مرحلة كتابة الاقتراحات
             if (gameState.suggestionsPhase && !gameState.roundEnded && !gameState.suggestionsRevealed) {
                 document.getElementById('voteModal').style.display = 'none';
                 document.getElementById('spySuggestionsModal').style.display = 'none';
@@ -1383,7 +1665,6 @@
                 document.getElementById('suggestionModal').style.display = 'none';
             }
 
-            // إذا تم إرسال الاقتراحات إلى الدخيل
             if (gameState.suggestionsSentToSpy && !gameState.roundEnded && !gameState.spyChose) {
                 document.getElementById('suggestionModal').style.display = 'none';
                 document.getElementById('liveSuggestionsModal').style.display = 'none';
@@ -1398,7 +1679,6 @@
                     timerInterval = null; }
             }
 
-            // إظهار لوحة ملخص الجولة فور اختيار الدخيل للكلمة (أو انتهاء وقته)
             if (gameState.roundEnded && gameState.roundId && gameState.roundId !== lastShownSummaryRoundId) {
                 lastShownSummaryRoundId = gameState.roundId;
                 showRoundSummaryModal();
@@ -1417,13 +1697,110 @@
             }
         }
 
+        // ========== دالة تعديل النقاط ==========
+
+        function openScoreModal(playerName) {
+            if (!currentPlayer.isHost) return;
+            scoreModalTarget = playerName;
+            document.getElementById('scoreModalPlayerName').textContent = playerName;
+            document.getElementById('scoreModalCurrentScore').textContent = gameState.scores[playerName] || 0;
+            document.getElementById('scoreModal').style.display = 'flex';
+            document.getElementById('customScoreInput').value = '';
+        }
+
+        function closeScoreModal() {
+            document.getElementById('scoreModal').style.display = 'none';
+            scoreModalTarget = null;
+        }
+
+        async function adjustScore(amount) {
+            if (!currentPlayer.isHost || !scoreModalTarget) return;
+            
+            const playerName = scoreModalTarget;
+            const currentScore = gameState.scores[playerName] || 0;
+            const newScore = currentScore + amount;
+            
+            // منع النقاط السالبة
+            if (newScore < 0) {
+                showAlert('❌ لا يمكن أن تصبح النقاط أقل من 0!', 'error');
+                return;
+            }
+
+            const updatedScores = { ...gameState.scores };
+            updatedScores[playerName] = newScore;
+
+            // تحديث playersData
+            const updatedPlayersData = gameState.playersData.map(p => {
+                if (p.name === playerName) {
+                    return { ...p, score: newScore };
+                }
+                return p;
+            });
+
+            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                scores: updatedScores,
+                playersData: updatedPlayersData
+            });
+
+            // إشعار
+            const sign = amount > 0 ? '+' : '';
+            showScoreNotification(playerName, amount);
+            sendSystemMessage(`⭐ تم تعديل نقاط ${playerName}: ${sign}${amount} نقطة (المجموع: ${newScore}) بواسطة المضيف`);
+            playSound(amount > 0 ? 'score-up' : 'score-down');
+            showAlert(`✅ تم ${amount > 0 ? 'إضافة' : 'خصم'} ${Math.abs(amount)} نقطة ${amount > 0 ? 'إلى' : 'من'} ${playerName}`, 'success');
+
+            closeScoreModal();
+        }
+
+        async function adjustCustomScore() {
+            if (!currentPlayer.isHost || !scoreModalTarget) return;
+            
+            const input = document.getElementById('customScoreInput');
+            const value = parseInt(input.value);
+            
+            if (isNaN(value) || value === 0) {
+                showAlert('❌ الرجاء إدخال قيمة صحيحة (موجبة أو سالبة)', 'error');
+                return;
+            }
+
+            await adjustScore(value);
+        }
+
+        function showScoreNotification(playerName, amount) {
+            const existing = document.querySelector('.score-change-notification');
+            if (existing) existing.remove();
+
+            const div = document.createElement('div');
+            div.className = `score-change-notification ${amount > 0 ? 'positive' : 'negative'}`;
+            const sign = amount > 0 ? '+' : '';
+            div.innerHTML = `
+                <span class="icon">${amount > 0 ? '⬆️' : '⬇️'}</span>
+                ${playerName}: ${sign}${amount} نقطة
+                <div class="sub">النقاط الجديدة: ${gameState.scores[playerName] + amount || 0}</div>
+            `;
+            document.body.appendChild(div);
+
+            setTimeout(() => {
+                div.style.opacity = '0';
+                div.style.transition = 'opacity 0.8s ease';
+                setTimeout(() => div.remove(), 900);
+            }, 2500);
+        }
+
+        // ========== updatePlayersListUI مع أزرار التحكم في النقاط ==========
+
         function updatePlayersListUI() {
             const container = document.getElementById('playersContainer');
             container.innerHTML = '';
 
             gameState.playersData.forEach(player => {
+                const isActive = gameState.players.includes(player.name);
                 const card = document.createElement('div');
                 card.className = 'player-card';
+
+                if (!isActive) {
+                    card.classList.add('inactive-player');
+                }
 
                 if (gameState.roundEnded && player.name === gameState.spyName) {
                     card.classList.add('revealed-spy');
@@ -1432,17 +1809,34 @@
                 const hasVoted = gameState.votes && gameState.votes[player.name] !== undefined;
                 const hasSuggested = gameState.suggestions && gameState.suggestions[player.name] !== undefined;
 
+                let statusBadge = '';
+                if (!isActive) {
+                    statusBadge = '<div class="player-badge badge-inactive">⏸️ غير متصل</div>';
+                } else if (player.isHost) {
+                    statusBadge = '<div class="player-badge badge-host">👑 مضيف</div>';
+                }
+
                 let playerHTML = `
                     <div class="player-icon">👤</div>
                     <div class="player-name">${player.name} ${hasVoted && gameState.votingOpen ? '🗳️' : ''} ${hasSuggested && gameState.suggestionsPhase ? '📝' : ''}</div>
-                    ${player.isHost ? '<div class="player-badge badge-host">👑 مضيف</div>' : ''}
+                    ${statusBadge}
                     ${(gameState.roundEnded && player.name === gameState.spyName) ? '<div class="player-badge badge-spy">🕵️ كان دخيلاً</div>' : ''}
                     <div class="player-score">⭐ ${gameState.scores[player.name] || 0} نقطة</div>
+                    ${!isActive ? '<div style="font-size: 11px; color: #888; margin-top: 5px;">⏳ يمكنه العودة بنفس الاسم</div>' : ''}
                 `;
 
-                if (currentPlayer.isHost && player.name !== currentPlayer.name) {
-                    playerHTML = `<button class="kick-btn" onclick="kickPlayer('${player.name}')" title="طرد اللاعب">✕</button>` +
-                        playerHTML;
+                // أزرار التحكم في النقاط (للمضيف فقط، وللاعبين النشطين)
+                if (currentPlayer.isHost && isActive && player.name !== currentPlayer.name) {
+                    playerHTML += `
+                        <div class="score-controls">
+                            <div class="btn-group-label">🎯 تعديل النقاط</div>
+                            <button class="btn-score-add" onclick="openScoreModal('${player.name}')">⭐ تعديل</button>
+                        </div>
+                    `;
+                }
+
+                if (currentPlayer.isHost && player.name !== currentPlayer.name && isActive) {
+                    playerHTML = `<button class="kick-btn" onclick="kickPlayer('${player.name}')" title="طرد اللاعب نهائياً">✕</button>` + playerHTML;
                 }
 
                 card.innerHTML = playerHTML;
@@ -1451,12 +1845,14 @@
 
             if (currentPlayer.isHost) {
                 document.getElementById('hostControls').style.display = 'block';
-                if (!gameState.gameStarted) {
+                
+                if (gameState.isPhaseReset || !gameState.gameStarted) {
                     document.getElementById('startGameBtn').style.display = 'block';
                     document.getElementById('changeWordBtn').style.display = 'none';
                     document.getElementById('openVoteBtn').style.display = 'none';
                     document.getElementById('nextRoundBtn').style.display = 'none';
                     document.getElementById('forceSendSuggestionsBtn').style.display = 'none';
+                    document.getElementById('resetPhaseBtn').style.display = 'none';
                 } else if (gameState.gameStarted && !gameState.votingOpen && !gameState.roundEnded && !gameState.suggestionsPhase &&
                     !gameState.suggestionsRevealed && !gameState.suggestionsSentToSpy) {
                     document.getElementById('startGameBtn').style.display = 'none';
@@ -1464,26 +1860,28 @@
                     document.getElementById('openVoteBtn').style.display = 'block';
                     document.getElementById('nextRoundBtn').style.display = 'none';
                     document.getElementById('forceSendSuggestionsBtn').style.display = 'none';
+                    document.getElementById('resetPhaseBtn').style.display = 'block';
                 } else if (gameState.roundEnded) {
                     document.getElementById('startGameBtn').style.display = 'none';
                     document.getElementById('changeWordBtn').style.display = 'none';
                     document.getElementById('openVoteBtn').style.display = 'none';
                     document.getElementById('nextRoundBtn').style.display = 'block';
                     document.getElementById('forceSendSuggestionsBtn').style.display = 'none';
+                    document.getElementById('resetPhaseBtn').style.display = 'none';
                 } else if (gameState.suggestionsPhase && !gameState.suggestionsSentToSpy) {
-                    // مرحلة كتابة الاقتراحات: إظهار زر احتياطي للمضيف لإرسالها يدوياً
-                    // (يظل هذا الزر متاحاً حتى لو كان المضيف نفسه هو الدخيل)
                     document.getElementById('startGameBtn').style.display = 'none';
                     document.getElementById('changeWordBtn').style.display = 'none';
                     document.getElementById('openVoteBtn').style.display = 'none';
                     document.getElementById('nextRoundBtn').style.display = 'none';
                     document.getElementById('forceSendSuggestionsBtn').style.display = 'block';
+                    document.getElementById('resetPhaseBtn').style.display = 'block';
                 } else {
                     document.getElementById('startGameBtn').style.display = 'none';
                     document.getElementById('changeWordBtn').style.display = 'none';
                     document.getElementById('openVoteBtn').style.display = 'none';
                     document.getElementById('nextRoundBtn').style.display = 'none';
                     document.getElementById('forceSendSuggestionsBtn').style.display = 'none';
+                    document.getElementById('resetPhaseBtn').style.display = 'none';
                 }
             } else {
                 document.getElementById('hostControls').style.display = 'none';
@@ -1498,9 +1896,12 @@
             scoresDiv.innerHTML = sortedPlayers.map(([name, score]) => {
                 const scoreClass = score < 0 ? 'negative-score' : '';
                 const isWinner = score >= TARGET_SCORE;
+                const isActive = gameState.players.includes(name);
                 return `
-                    <div class="score-item ${isWinner ? 'winner-score' : ''}">
+                    <div class="score-item ${isWinner ? 'winner-score' : ''}" style="${!isActive ? 'opacity: 0.5;' : ''}">
                         <strong>${name}</strong>: <span class="${scoreClass}">${score} ن</span>
+                        ${!isActive ? '⏸️' : ''}
+                        ${currentPlayer.isHost && isActive && name !== currentPlayer.name ? ' 👑' : ''}
                     </div>`;
             }).join('');
         }
@@ -1508,11 +1909,14 @@
         function updateGameUI() {
             const statusDiv = document.getElementById('gameStatus');
 
-            if (!gameState.gameStarted) {
+            if (!gameState.gameStarted || gameState.isPhaseReset) {
+                const activePlayers = gameState.players.filter(p => gameState.players.includes(p)).length;
+                const resetMsg = gameState.isPhaseReset ? ' (تم إعادة ضبط المرحلة - يمكن للجميع الانضمام)' : '';
                 statusDiv.innerHTML = `
                     <div class="card" style="text-align: center;">
-                        <h3>💤 بانتظار إطلاق المضيف لإشارة بدء اللعبة...</h3>
-                        <p style="margin-top: 10px; color: #ccc;">العدد الحالي المتصل: ${gameState.players.length} لاعبين</p>
+                        <h3>💤 بانتظار إطلاق المضيف لإشارة بدء اللعبة...${resetMsg}</h3>
+                        <p style="margin-top: 10px; color: #ccc;">العدد الحالي المتصل: ${activePlayers} لاعبين</p>
+                        ${gameState.isPhaseReset ? '<p style="color: #ffc107; margin-top: 5px;">🔄 المرحلة معاد ضبطها! يمكن للاعبين الانضمام.</p>' : ''}
                     </div>`;
                 return;
             }
@@ -1563,7 +1967,45 @@
             }
         }
 
-        // ========== لوحة ملخص الجولة (تظهر بعد اختيار الدخيل للكلمة) ==========
+        // ========== دالة إعادة ضبط المرحلة ==========
+
+        async function resetPhase() {
+            if (!currentPlayer.isHost) return;
+            if (!confirm('⚠️ هل أنت متأكد؟ سيتم إعادة ضبط المرحلة الحالية. يمكن للاعبين الانضمام مجدداً. (سيتم الحفاظ على النقاط)')) return;
+
+            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                gameStarted: false,
+                roundEnded: false,
+                votingOpen: false,
+                suggestionsPhase: false,
+                suggestions: {},
+                suggestionsRevealed: false,
+                suggestionsSentToSpy: false,
+                spyChose: false,
+                spyChoice: null,
+                spyTimerStarted: false,
+                timerEnd: null,
+                votes: {},
+                displayedSuggestions: [],
+                secretWord: '',
+                spyName: '',
+                isPhaseReset: true,
+                scores: { ...gameState.scores },
+                roundId: Date.now()
+            });
+
+            if (timerInterval) { clearInterval(timerInterval);
+                timerInterval = null; }
+            document.getElementById('liveSuggestionsModal').style.display = 'none';
+            document.getElementById('spySuggestionsModal').style.display = 'none';
+            document.getElementById('roundSummaryModal').style.display = 'none';
+
+            sendSystemMessage(`🔄 تم إعادة ضبط المرحلة بواسطة المضيف! يمكن للجميع الانضمام الآن. (الحفاظ على النقاط)`);
+            showAlert('✅ تم إعادة ضبط المرحلة! يمكن للاعبين الانضمام.', 'success');
+            playSound('reveal');
+        }
+
+        // ========== لوحة ملخص الجولة ==========
 
         function showRoundSummaryModal() {
             const spyName = gameState.spyName;
@@ -1577,7 +2019,6 @@
             const scoresNow = gameState.scores || {};
             const players = gameState.players || [];
 
-            // 1) نتيجة الجولة
             let resultHTML = `
                 <div class="summary-section">
                     <h3>🎯 نتيجة الجولة</h3>
@@ -1591,7 +2032,6 @@
                     </div>
                 </div>`;
 
-            // 2) التصويت: من صوّت على من
             let votesHTML = `<div class="summary-section"><h3>🗳️ من صوّت على من</h3>`;
             const voteEntries = Object.entries(votes);
             if (voteEntries.length === 0) {
@@ -1608,7 +2048,6 @@
             }
             votesHTML += `</div>`;
 
-            // 3) الاقتراحات التي كتبها اللاعبون
             let suggestionsHTML = `<div class="summary-section"><h3>📝 اقتراحات اللاعبين</h3>`;
             const suggestionEntries = Object.entries(suggestions);
             if (suggestionEntries.length === 0) {
@@ -1624,7 +2063,6 @@
             }
             suggestionsHTML += `</div>`;
 
-            // 4) النقاط المكتسبة والضائعة في هذه الجولة
             let scoresHTML = `<div class="summary-section"><h3>⭐ النقاط في هذه الجولة</h3>`;
             players.forEach(player => {
                 const before = scoresStart[player] || 0;
@@ -1688,8 +2126,6 @@
             progressFill.style.width = `${progress}%`;
             status.textContent = `${submitted} / ${normalPlayers.length} لاعب كتب اقتراحه`;
 
-            // الإرسال إلى الدخيل يتم الآن تلقائياً وفوراً بمجرد اكتمال كل الاقتراحات،
-            // لذا لا حاجة لإظهار زر يدوي للمضيف في الوضع الطبيعي
             hostBtn.style.display = 'none';
 
             if (submitted > 0 && gameState.suggestionsPhase) {
@@ -1706,10 +2142,8 @@
 
         // ========== إرسال الاقتراحات إلى الدخيل ==========
 
-        // دالة مشتركة: تخلط الاقتراحات مع الكلمة الصحيحة وترسلها إلى الدخيل
-        // تُستدعى تلقائياً بمجرد أن ينهي آخر لاعب كتابة اقتراحه، أو يدوياً من زر المضيف (احتياطياً)
         async function deliverSuggestionsToSpy(roomState) {
-            if (roomState.suggestionsSentToSpy) return; // تم الإرسال مسبقاً، تفادي التكرار
+            if (roomState.suggestionsSentToSpy) return;
 
             const suggestions = { ...roomState.suggestions };
             const allWords = [...Object.values(suggestions)];
@@ -1728,20 +2162,17 @@
                 spyChoice: null
             });
 
-            // إغلاق نافذة الاقتراحات الحية
             document.getElementById('liveSuggestionsModal').style.display = 'none';
 
             sendSystemMessage(`📤 اكتملت جميع الاقتراحات وتم إرسالها تلقائياً إلى الدخيل! ${roomState.spyName} لديه ${SPY_TIMER_DURATION} ثانية لاختيار الكلمة الصحيحة.`);
             showAlert(`✅ تم إرسال الاقتراحات إلى الدخيل!`, 'success');
             playSound('reveal');
 
-            // إذا كان المستخدم الحالي هو الدخيل، نعرض له الاقتراحات
             if (currentPlayer.isSpy) {
                 showSpySuggestions(suggestions);
             }
         }
 
-        // زر احتياطي يدوي للمضيف (لن يكون ضرورياً عادة لأن الإرسال يتم تلقائياً فور اكتمال الاقتراحات)
         async function sendSuggestionsToSpy() {
             if (!currentPlayer.isHost) return;
             if (!gameState.suggestionsPhase) return;
@@ -1785,11 +2216,9 @@
                 grid.appendChild(item);
             });
 
-            // بدء العد التنازلي إذا لم يبدأ بعد
             if (!gameState.spyTimerStarted) {
                 startSpyTimer();
             } else {
-                // تحديث الوقت المتبقي
                 if (gameState.timerEnd) {
                     const now = Date.now();
                     const remaining = Math.max(0, Math.ceil((gameState.timerEnd - now) / 1000));
@@ -1865,7 +2294,6 @@
             const spyName = gameState.spyName;
             const currentScores = { ...gameState.scores };
 
-            // خصم 5 نقاط من الدخيل لعدم اختياره
             currentScores[spyName] = (currentScores[spyName] || 0) - 5;
 
             await database.ref(`rooms/${currentPlayer.roomCode}`).update({
@@ -1976,7 +2404,8 @@
                 votingOpen: false,
                 displayedSuggestions: [],
                 scoresAtRoundStart: { ...gameState.scores },
-                roundId: Date.now()
+                roundId: Date.now(),
+                isPhaseReset: false
             });
 
             sendSystemMessage(`🔄 قام المضيف بتغيير الكلمة السرية والدخيل! الدخيل الجديد هو: ${newSpy}`);
@@ -1997,7 +2426,8 @@
                 spyChoice: null,
                 spyTimerStarted: false,
                 timerEnd: null,
-                displayedSuggestions: []
+                displayedSuggestions: [],
+                isPhaseReset: false
             });
             sendSystemMessage(`🗳️ أطلق المضيف عملية التصويت! جميع اللاعبين يصوتون الآن على من يعتقدون أنه الدخيل.`);
             playSound('vote');
@@ -2030,7 +2460,9 @@
             const latestRoom = snapshot.val();
             const totalVotes = Object.keys(latestRoom.votes || {}).length;
 
-            if (totalVotes === latestRoom.players.length) {
+            const activePlayers = latestRoom.players.length;
+
+            if (totalVotes === activePlayers) {
                 processVotingResults(latestRoom);
             }
         }
@@ -2040,18 +2472,15 @@
             const spyName = currentRoomState.spyName;
             const currentScores = { ...currentRoomState.scores };
 
-            // حساب عدد الأصوات لكل لاعب - يصوّت الدخيل مثل أي لاعب آخر لكن تصويته لا يُحتسب في الإحصاء
             const voteCount = {};
             Object.entries(votes).forEach(([voter, target]) => {
-                if (voter === spyName) return; // تجاهل تصويت الدخيل عند الاحتساب
+                if (voter === spyName) return;
                 voteCount[target] = (voteCount[target] || 0) + 1;
             });
 
-            // معالجة العقوبات الجماعية مرة واحدة فقط لكل هدف (لتفادي تكرار الخصم أكثر من مرة)
             Object.entries(voteCount).forEach(([target, votesOnTarget]) => {
                 const targetIsSpy = (target === spyName);
 
-                // القاعدة 1: 2+ لاعبين يصوتون على بريء → البريء يخسر 5 نقاط (مرة واحدة فقط)
                 if (votesOnTarget >= 2 && !targetIsSpy) {
                     currentScores[target] = (currentScores[target] || 0) - 5;
                     sendSystemMessage(`📢 تم التصويت على ${target} من قبل ${votesOnTarget} لاعبين! بما أنه ليس الدخيل، تم خصم 5 نقاط منه.`);
@@ -2059,7 +2488,6 @@
                     playSound('error');
                 }
 
-                // القاعدة 2: 3+ لاعبين يصوتون على الدخيل → الدخيل يخسر 5 نقاط (مرة واحدة فقط)
                 if (votesOnTarget >= 3 && targetIsSpy) {
                     currentScores[spyName] = (currentScores[spyName] || 0) - 5;
                     sendSystemMessage(`📢 تم التصويت على الدخيل ${spyName} من قبل ${votesOnTarget} لاعبين! تم خصم 5 نقاط من الدخيل.`);
@@ -2068,8 +2496,6 @@
                 }
             });
 
-            // معالجة نتائج التصويت الفردية لكل لاعب (مكافأة فقط على التصويت الصحيح على الدخيل)
-            // لا تُخصم أي نقطة من المصوِّت أو من الشخص المصوَّت عليه في حال كان صوتاً فردياً (أقل من 2 على نفس الهدف)
             currentRoomState.players.forEach(player => {
                 const playerVote = votes[player];
                 if (!playerVote) return;
@@ -2077,7 +2503,6 @@
                 const isSpy = (player === spyName);
                 const targetIsSpy = (playerVote === spyName);
 
-                // مكافأة على التصويت الصحيح على الدخيل فقط
                 if (!isSpy && targetIsSpy) {
                     currentScores[player] = (currentScores[player] || 0) + 10;
                 }
@@ -2098,7 +2523,8 @@
                 playersData: currentRoomState.playersData.map(p => ({
                     ...p,
                     score: currentScores[p.name] || 0
-                }))
+                })),
+                isPhaseReset: false
             });
 
             sendSystemMessage(`📝 انتهى التصويت! الآن يكتب اللاعبون اقتراحاتهم للكلمة السرية.`);
@@ -2209,7 +2635,6 @@
             showAlert(`✅ تم إرسال اقتراحك: "${suggestion}"`, 'success');
             playSound('success');
 
-            // تعطيل حقل الإدخال بعد الإرسال
             const inputField = document.getElementById('suggestionInput');
             if (inputField) {
                 inputField.disabled = true;
@@ -2227,12 +2652,10 @@
             const submitted = Object.keys(latestRoom.suggestions || {}).length;
 
             if (submitted === normalPlayers.length) {
-                // جميع اللاعبين كتبوا اقتراحاتهم - إرسال الاقتراحات تلقائياً وفوراً إلى الدخيل
                 document.getElementById('suggestionModal').style.display = 'none';
                 document.getElementById('liveSuggestionsModal').style.display = 'none';
                 await deliverSuggestionsToSpy(latestRoom);
             } else {
-                // ما زال هناك لاعبون لم يكتبوا اقتراحاتهم بعد، نحدّث نافذة المتابعة الحية فقط
                 updateLiveSuggestions(latestRoom.suggestions || {});
             }
         }
@@ -2253,7 +2676,8 @@
                 spyTimerStarted: false,
                 timerEnd: null,
                 votes: {},
-                displayedSuggestions: []
+                displayedSuggestions: [],
+                isPhaseReset: false
             });
             if (timerInterval) { clearInterval(timerInterval);
                 timerInterval = null; }
@@ -2267,7 +2691,8 @@
         // ========== بدء اللعبة ==========
 
         async function startGame() {
-            if (gameState.players.length < 3) { showAlert('❌ لا يمكن اللعب بأقل من 3 لاعبين!', 'error'); return; }
+            const activePlayers = gameState.players.length;
+            if (activePlayers < 3) { showAlert(`❌ لا يمكن اللعب بأقل من 3 لاعبين! (المتصلون حالياً: ${activePlayers})`, 'error'); return; }
 
             const randomWord = SECRET_WORDS[Math.floor(Math.random() * SECRET_WORDS.length)];
             const randomSpy = gameState.players[Math.floor(Math.random() * gameState.players.length)];
@@ -2289,7 +2714,8 @@
                 timerEnd: null,
                 displayedSuggestions: [],
                 scoresAtRoundStart: { ...gameState.scores },
-                roundId: Date.now()
+                roundId: Date.now(),
+                isPhaseReset: false
             });
             sendSystemMessage(`📢 بدأت جولة جديدة! الكلمة السرية جديدة.`);
             playSound('reveal');
@@ -2315,7 +2741,8 @@
                 spyTimerStarted: false,
                 timerEnd: null,
                 votes: {},
-                displayedSuggestions: []
+                displayedSuggestions: [],
+                isPhaseReset: false
             });
             if (timerInterval) { clearInterval(timerInterval);
                 timerInterval = null; }
@@ -2325,12 +2752,12 @@
             startGame();
         }
 
-        // ========== طرد لاعب ==========
+        // ========== طرد لاعب نهائياً ==========
 
         async function kickPlayer(playerName) {
             if (!currentPlayer.isHost) return;
             if (playerName === currentPlayer.name) return;
-            if (!confirm(`هل أنت متأكد أنك تريد طرد اللاعب ${playerName} من الغرفة؟`)) return;
+            if (!confirm(`⚠️ هل أنت متأكد أنك تريد طرد اللاعب ${playerName} نهائياً من الغرفة؟\nسيتم حذف جميع بياناته ولن يتمكن من العودة.`)) return;
 
             const updatedPlayers = gameState.players.filter(p => p !== playerName);
             const updatedPlayersData = gameState.playersData.filter(p => p.name !== playerName);
@@ -2343,8 +2770,8 @@
                 scores: updatedScores
             });
 
-            sendSystemMessage(`🚫 تم طرد اللاعب ${playerName} من الغرفة بواسطة المضيف.`);
-            showAlert(`✅ تم طرد ${playerName}`, 'info');
+            sendSystemMessage(`🚫 تم طرد اللاعب ${playerName} نهائياً من الغرفة بواسطة المضيف.`);
+            showAlert(`✅ تم طرد ${playerName} نهائياً`, 'info');
         }
 
         // ========== الدردشة ==========
@@ -2376,16 +2803,33 @@
             showAlert('📋 تم نسخ كود الغرفة إلى الحافظة!', 'info');
         }
 
+        // ========== مغادرة الغرفة ==========
+
         async function leaveRoom() {
             if (!currentPlayer.roomCode) return;
+            
             if (currentPlayer.isHost) {
-                await database.ref(`rooms/${currentPlayer.roomCode}`).remove();
-                await database.ref(`chats/${currentPlayer.roomCode}`).remove();
+                if (confirm('⚠️ أنت المضيف. هل أنت متأكد أنك تريد حذف الغرفة؟')) {
+                    await database.ref(`rooms/${currentPlayer.roomCode}`).remove();
+                    await database.ref(`chats/${currentPlayer.roomCode}`).remove();
+                } else {
+                    return;
+                }
             } else {
                 const updatedPlayers = gameState.players.filter(p => p !== currentPlayer.name);
-                const updatedPlayersData = gameState.playersData.filter(p => p.name !== currentPlayer.name);
-                await database.ref(`rooms/${currentPlayer.roomCode}`).update({ players: updatedPlayers,
-                    playersData: updatedPlayersData });
+                const updatedPlayersData = gameState.playersData.map(p => {
+                    if (p.name === currentPlayer.name) {
+                        return { ...p, active: false };
+                    }
+                    return p;
+                });
+                
+                await database.ref(`rooms/${currentPlayer.roomCode}`).update({ 
+                    players: updatedPlayers,
+                    playersData: updatedPlayersData
+                });
+                sendSystemMessage(`👋 غادر اللاعب ${currentPlayer.name} الغرفة. (يمكنه العودة بنفس الاسم والنقاط)`);
+                showAlert(`👋 تم مغادرة الغرفة. يمكنك العودة بنفس الاسم والنقاط.`, 'info');
             }
             if (timerInterval) { clearInterval(timerInterval);
                 timerInterval = null; }
