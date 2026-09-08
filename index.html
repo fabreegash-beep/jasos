@@ -11,6 +11,7 @@
     </script>
 
     <style>
+        /* ... جميع الأنماط السابقة ... */
         * {
             margin: 0;
             padding: 0;
@@ -46,6 +47,191 @@
             z-index: 1;
         }
 
+        /* ... باقي الأنماط ... */
+
+        /* نافذة تأكيد الخروج المخصصة */
+        .exit-confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .exit-confirm-overlay.active {
+            display: flex;
+        }
+
+        .exit-confirm-card {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            border: 2px solid #ff4444;
+            animation: fadeInUp 0.4s ease;
+            box-shadow: 0 20px 60px rgba(255, 68, 68, 0.3);
+        }
+
+        .exit-confirm-card .icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .exit-confirm-card h2 {
+            color: #ff4444;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .exit-confirm-card p {
+            color: #ddd;
+            font-size: 16px;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .exit-confirm-card .warning-text {
+            color: #ffc107;
+            font-size: 14px;
+            background: rgba(255, 193, 7, 0.1);
+            padding: 10px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 193, 7, 0.2);
+        }
+
+        .exit-confirm-card .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .exit-confirm-card .btn-group button {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .exit-confirm-card .btn-stay {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+        }
+
+        .exit-confirm-card .btn-stay:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .exit-confirm-card .btn-leave {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+        }
+
+        .exit-confirm-card .btn-leave:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 68, 68, 0.4);
+        }
+
+        .exit-confirm-card .player-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .exit-confirm-card .player-info strong {
+            color: #ffd89b;
+        }
+
+        /* Connection Status */
+        .connection-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 5000;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .connection-status.online {
+            background: rgba(76, 175, 80, 0.85);
+            color: white;
+        }
+
+        .connection-status.offline {
+            background: rgba(255, 68, 68, 0.85);
+            color: white;
+            animation: pulse 0.5s infinite;
+        }
+
+        /* Reconnect Countdown */
+        .reconnect-countdown {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px 30px;
+            border-radius: 20px;
+            z-index: 5000;
+            text-align: center;
+            border: 2px solid #ffc107;
+            animation: fadeInUp 0.3s ease;
+            min-width: 280px;
+        }
+
+        .reconnect-countdown .timer {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffc107;
+        }
+
+        .reconnect-countdown .text {
+            color: #ddd;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .reconnect-btn {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.3s;
+            width: auto;
+        }
+
+        .reconnect-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+        }
+
         .screen {
             display: none;
             animation: fadeInUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -67,24 +253,11 @@
         }
 
         @keyframes pulse {
-            0%,
-            100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        @keyframes glow {
-            0% {
-                box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
-            }
-            100% {
-                box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-            }
-        }
-
+        /* ... باقي الأنماط من الكود الأصلي ... */
         .card {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(12px);
@@ -94,12 +267,6 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 215, 0, 0.3);
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
         }
 
         h1 {
@@ -113,81 +280,7 @@
             animation: pulse 2s infinite;
         }
 
-        h2 {
-            margin-bottom: 20px;
-            color: #ffd89b;
-            position: relative;
-            display: inline-block;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #ffd89b, transparent);
-        }
-
-        input,
-        select,
-        button {
-            width: 100%;
-            padding: 14px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-family: inherit;
-            transition: all 0.3s ease;
-        }
-
-        input,
-        select {
-            background: rgba(255, 255, 255, 0.92);
-            color: #333;
-        }
-
-        input:focus,
-        select:focus {
-            outline: none;
-            transform: scale(1.02);
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5);
-        }
-
-        button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-            position: relative;
-            overflow: hidden;
-        }
-
-        button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        button:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
-        }
-
+        /* ... باقي الأنماط ... */
         .btn-secondary {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
@@ -210,58 +303,32 @@
             animation: pulse 1.5s infinite;
         }
 
-        .btn-reset:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.5);
-        }
-
-        .btn-score-add {
-            background: linear-gradient(135deg, #4caf50, #2e7d32);
-            color: white;
-            padding: 4px 10px;
-            font-size: 14px;
-            margin: 2px;
-            width: auto;
-            min-width: 35px;
-        }
-
-        .btn-score-add:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
-        }
-
-        .btn-score-sub {
-            background: linear-gradient(135deg, #f44336, #c62828);
-            color: white;
-            padding: 4px 10px;
-            font-size: 14px;
-            margin: 2px;
-            width: auto;
-            min-width: 35px;
-        }
-
-        .btn-score-sub:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
-        }
-
-        .score-controls {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 4px;
-            margin-top: 6px;
-            padding: 6px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-        }
-
-        .score-controls .btn-group-label {
-            font-size: 11px;
-            color: #aaa;
+        input, select, button {
             width: 100%;
-            text-align: center;
-            margin-bottom: 2px;
+            padding: 14px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input, select {
+            background: rgba(255, 255, 255, 0.92);
+            color: #333;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
         }
 
         .players-list {
@@ -282,28 +349,13 @@
             position: relative;
         }
 
-        .player-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+        .player-card.disconnected {
+            opacity: 0.6;
+            border-color: #ff6b6b;
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.15), rgba(255, 68, 68, 0.05));
         }
 
-        .player-card.revealed-spy {
-            border-color: #ff4444;
-            background: linear-gradient(135deg, rgba(255, 68, 68, 0.3), rgba(255, 68, 68, 0.1));
-        }
-
-        .player-card.inactive-player {
-            opacity: 0.5;
-            border-color: #888;
-            filter: grayscale(0.5);
-        }
-
-        .player-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-
-        .player-name {
+        .player-card .player-name {
             font-size: 18px;
             font-weight: bold;
         }
@@ -332,39 +384,150 @@
             color: #aaa;
         }
 
-        .player-score {
-            margin-top: 8px;
-            font-size: 14px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 20px;
-            padding: 4px 8px;
-            display: inline-block;
+        .badge-disconnected {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+            animation: pulse 1s infinite;
         }
 
-        .kick-btn {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            background: rgba(255, 0, 0, 0.7);
-            border: none;
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+            100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            border-radius: 15px;
+            background: #333;
+            z-index: 3000;
+            animation: slideInRight 0.3s ease;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .alert-success { background: linear-gradient(135deg, #4caf50, #45a049); }
+        .alert-error { background: linear-gradient(135deg, #f44336, #e53935); }
+        .alert-info { background: linear-gradient(135deg, #2196f3, #1976d2); }
+
+        .rejoin-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #4caf50, #45a049);
             color: white;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            padding: 30px 50px;
+            border-radius: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            z-index: 6000;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 20px 60px rgba(76, 175, 80, 0.5);
+            text-align: center;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .rejoin-notification .sub {
             font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            padding: 0;
-            margin: 0;
+            font-weight: normal;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+
+        .rejoin-notification .icon {
+            font-size: 50px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* نافذة التصويت وغيرها */
+        .vote-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
+            animation: fadeInUp 0.3s ease;
         }
 
-        .kick-btn:hover {
-            transform: scale(1.2);
-            background: #ff0000;
+        .vote-card {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 30px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid #ffd700;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        /* باقي الأنماط المطلوبة */
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .inline-btn {
+            width: auto;
+            margin: 0;
+            padding: 10px 20px;
+        }
+
+        .scores-board {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .scores-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .score-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 12px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .target-info {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #333;
+            text-align: center;
+            padding: 10px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            animation: glow 1.5s infinite;
         }
 
         .chat-area {
@@ -383,20 +546,6 @@
             padding: 10px;
         }
 
-        .messages::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .messages::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        .messages::-webkit-scrollbar-thumb {
-            background: #667eea;
-            border-radius: 10px;
-        }
-
         .message {
             margin-bottom: 10px;
             padding: 10px 15px;
@@ -407,14 +556,8 @@
         }
 
         @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .message.system {
@@ -460,194 +603,8 @@
         }
 
         @keyframes spyPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.6);
-                transform: scale(1);
-            }
-            50% {
-                box-shadow: 0 0 0 20px rgba(192, 57, 43, 0);
-                transform: scale(1.02);
-            }
-        }
-
-        .vote-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(8px);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: fadeInUp 0.3s ease;
-        }
-
-        .vote-card {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            border-radius: 30px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 2px solid #ffd700;
-            animation: fadeInUp 0.4s ease;
-        }
-
-        .vote-option {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            border-radius: 15px;
-            padding: 15px;
-            margin: 10px 0;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .vote-option:hover {
-            background: linear-gradient(135deg, #4facfe, #00f2fe);
-            transform: scale(1.05);
-        }
-
-        .spy-guess-option {
-            background: linear-gradient(135deg, rgba(142, 68, 173, 0.3), rgba(142, 68, 173, 0.1));
-            border: 1px solid #8e44ad;
-            transition: all 0.3s;
-            cursor: pointer;
-            text-align: center;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .spy-guess-option:hover {
-            background: linear-gradient(135deg, #8e44ad, #c0392b);
-            transform: scale(1.05);
-        }
-
-        .spy-guess-option.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .inline-btn {
-            width: auto;
-            margin: 0;
-            padding: 10px 20px;
-        }
-
-        .scores-board {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .scores-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .score-item {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            border-radius: 12px;
-            padding: 8px 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s;
-        }
-
-        .score-item:hover {
-            transform: scale(1.05);
-        }
-
-        .negative-score {
-            color: #ff8888;
-        }
-
-        .winner-score {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.1));
-            border: 1px solid #ffd700;
-            animation: glow 1s infinite;
-        }
-
-        .summary-card {
-            max-width: 650px;
-        }
-
-        .summary-section {
-            background: rgba(0, 0, 0, 0.25);
-            border-radius: 16px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .summary-section h3 {
-            color: #ffd89b;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-
-        .summary-log-item {
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 10px;
-            padding: 8px 12px;
-            margin: 6px 0;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .summary-empty {
-            text-align: center;
-            color: #aaa;
-            font-size: 13px;
-            padding: 6px;
-        }
-
-        .summary-positive {
-            color: #4facfe;
-            font-weight: bold;
-        }
-
-        .summary-negative {
-            color: #ff8888;
-            font-weight: bold;
-        }
-
-        .summary-neutral {
-            color: #ccc;
-        }
-
-        .error-message {
-            color: #ff4444;
-            font-size: 12px;
-            margin-top: -5px;
-            margin-bottom: 10px;
+            0%, 100% { box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.6); transform: scale(1); }
+            50% { box-shadow: 0 0 0 20px rgba(192, 57, 43, 0); transform: scale(1.02); }
         }
 
         .host-controls {
@@ -657,55 +614,6 @@
             margin-top: 15px;
             text-align: center;
             border: 1px solid rgba(255, 215, 0, 0.3);
-        }
-
-        .alert {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            left: 20px;
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 15px 20px;
-            border-radius: 15px;
-            background: #333;
-            z-index: 3000;
-            animation: slideInRight 0.3s ease;
-            text-align: center;
-            font-weight: bold;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .alert-success {
-            background: linear-gradient(135deg, #4caf50, #45a049);
-        }
-        .alert-error {
-            background: linear-gradient(135deg, #f44336, #e53935);
-        }
-        .alert-info {
-            background: linear-gradient(135deg, #2196f3, #1976d2);
-        }
-
-        .target-info {
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            color: #333;
-            text-align: center;
-            padding: 10px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            font-weight: bold;
-            animation: glow 1.5s infinite;
         }
 
         .btn-group {
@@ -721,30 +629,32 @@
             margin: 5px;
         }
 
-        .suggestions-area {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 20px;
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-bar .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .spy-timer-large {
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
             padding: 20px;
-            margin-top: 20px;
-            border: 2px solid #4facfe;
-            animation: fadeInUp 0.5s ease;
-        }
-
-        .suggestion-input-area {
-            display: flex;
-            gap: 10px;
+            background: rgba(255, 0, 0, 0.2);
+            border-radius: 20px;
+            border: 3px solid #ff4444;
             margin: 15px 0;
-        }
-
-        .suggestion-input-area input {
-            margin: 0;
-            flex: 1;
-        }
-
-        .suggestion-input-area button {
-            width: auto;
-            padding: 12px 25px;
-            margin: 0;
+            animation: pulse 0.5s infinite;
         }
 
         .suggestions-grid {
@@ -764,13 +674,6 @@
             position: relative;
         }
 
-        .suggestion-item .player-name-tag {
-            font-size: 11px;
-            color: #aaa;
-            display: block;
-            margin-top: 5px;
-        }
-
         .suggestion-item .spy-choice-btn {
             background: linear-gradient(135deg, #8e44ad, #c0392b);
             border: none;
@@ -788,91 +691,6 @@
             transform: scale(1.05);
         }
 
-        .suggestion-item .spy-choice-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .timer-display {
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-            padding: 10px;
-            border-radius: 15px;
-            margin: 10px 0;
-            background: rgba(255, 0, 0, 0.2);
-            border: 2px solid #ff4444;
-            animation: pulse 1s infinite;
-        }
-
-        .timer-display.urgent {
-            color: #ff4444;
-            animation: pulse 0.5s infinite;
-        }
-
-        .waiting-message {
-            text-align: center;
-            padding: 20px;
-            font-size: 18px;
-            color: #ffc107;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-
-        .progress-bar .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4facfe, #00f2fe);
-            border-radius: 10px;
-            transition: width 0.3s ease;
-        }
-
-        .spy-waiting-message {
-            background: linear-gradient(135deg, rgba(142, 68, 173, 0.3), rgba(192, 57, 43, 0.2));
-            border: 2px solid #8e44ad;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            margin: 10px 0;
-        }
-
-        .spy-waiting-message h3 {
-            color: #f1c40f;
-            margin-bottom: 10px;
-        }
-
-        .spy-waiting-message p {
-            color: #ddd;
-        }
-
-        .suggestion-reveal-list {
-            max-height: 300px;
-            overflow-y: auto;
-            margin: 10px 0;
-        }
-
-        .suggestion-reveal-list .suggestion-item {
-            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1), rgba(79, 172, 254, 0.05));
-            border-color: #4facfe;
-        }
-
-        .suggestion-done {
-            color: #4caf50;
-            font-weight: bold;
-        }
-
-        .suggestion-waiting {
-            color: #ffc107;
-            font-weight: bold;
-        }
-
         .send-suggestions-btn {
             background: linear-gradient(135deg, #f39c12, #e67e22);
             color: white;
@@ -887,108 +705,103 @@
             width: 100%;
         }
 
-        .send-suggestions-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.5);
+        .score-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 6px;
+            padding: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
         }
 
-        .send-suggestions-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .spy-timer-large {
-            font-size: 48px;
-            font-weight: bold;
-            text-align: center;
-            padding: 20px;
-            background: rgba(255, 0, 0, 0.2);
-            border-radius: 20px;
-            border: 3px solid #ff4444;
-            margin: 15px 0;
-            animation: pulse 0.5s infinite;
-        }
-
-        .spy-timer-large.urgent {
-            color: #ff4444;
-            animation: pulse 0.3s infinite;
-        }
-
-        .rejoin-notification {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #4caf50, #45a049);
-            color: white;
-            padding: 30px 50px;
-            border-radius: 30px;
-            font-size: 28px;
-            font-weight: bold;
-            z-index: 6000;
-            animation: fadeInUp 0.5s ease;
-            box-shadow: 0 20px 60px rgba(76, 175, 80, 0.5);
-            text-align: center;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .rejoin-notification .sub {
-            font-size: 16px;
-            font-weight: normal;
-            opacity: 0.8;
-            margin-top: 8px;
-        }
-
-        .rejoin-notification .icon {
-            font-size: 50px;
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .score-change-notification {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #ffd700, #f39c12);
-            color: #1a1a2e;
-            padding: 25px 50px;
-            border-radius: 25px;
-            font-size: 26px;
-            font-weight: bold;
-            z-index: 5500;
-            animation: fadeInUp 0.4s ease;
-            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.4);
-            text-align: center;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .score-change-notification .sub {
-            font-size: 14px;
-            font-weight: normal;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-
-        .score-change-notification .icon {
-            font-size: 40px;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .score-change-notification.positive {
+        .btn-score-add {
             background: linear-gradient(135deg, #4caf50, #2e7d32);
             color: white;
+            padding: 4px 10px;
+            font-size: 14px;
+            margin: 2px;
+            width: auto;
+            min-width: 35px;
         }
 
-        .score-change-notification.negative {
+        .btn-score-sub {
             background: linear-gradient(135deg, #f44336, #c62828);
             color: white;
+            padding: 4px 10px;
+            font-size: 14px;
+            margin: 2px;
+            width: auto;
+            min-width: 35px;
+        }
+
+        .kick-btn {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: rgba(255, 0, 0, 0.7);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .kick-btn:hover {
+            transform: scale(1.2);
+            background: #ff0000;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 12px;
+            margin-top: -5px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
+    <!-- نافذة تأكيد الخروج المخصصة -->
+    <div id="exitConfirmOverlay" class="exit-confirm-overlay">
+        <div class="exit-confirm-card">
+            <div class="icon">⚠️</div>
+            <h2>هل أنت متأكد من الخروج؟</h2>
+            <p>إذا قمت بتحديث الصفحة أو الخروج منها:</p>
+            <div class="warning-text">
+                🔴 سيتم وضعك في حالة <strong>"غير متصل"</strong><br>
+                ⏳ ستحاول اللعبة إعادة الاتصال بك تلقائياً خلال <strong>10 ثوانٍ</strong><br>
+                ✅ سيتم <strong>الحفاظ على نقاطك</strong> وتقدمك في اللعبة
+            </div>
+            <div class="player-info">
+                👤 اللاعب: <strong id="exitConfirmPlayerName">---</strong> &nbsp;|&nbsp; ⭐ النقاط: <strong id="exitConfirmPlayerScore">0</strong>
+            </div>
+            <div class="btn-group">
+                <button class="btn-stay" onclick="cancelExit()">✅ البقاء في اللعبة</button>
+                <button class="btn-leave" onclick="confirmExit()">🚪 تأكيد الخروج</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Connection Status -->
+    <div id="connectionStatus" class="connection-status online">🟢 متصل</div>
+
+    <!-- Reconnect Countdown -->
+    <div id="reconnectCountdown" class="reconnect-countdown" style="display: none;">
+        <div class="timer" id="reconnectTimer">10</div>
+        <div class="text">⏳ جاري إعادة الاتصال تلقائياً...</div>
+        <button class="reconnect-btn" onclick="manualReconnect()">🔄 إعادة الاتصال الآن</button>
+    </div>
+
     <div class="container">
         <div id="startScreen" class="screen active">
             <div class="card">
@@ -1000,6 +813,7 @@
                     <p>📌 تصويت صحيح على الدخيل +10 | تصويت جماعي (شخصان أو أكثر) على بريء -5 له فقط | تخمين الدخيل صحيح +10 | خطأ -5</p>
                     <p style="color: #ffc107;">🕵️ الدخيل مخفي - فقط الدخيل لا يعرف الكلمة!</p>
                     <p style="color: #4facfe; font-size: 14px;">👑 المضيف يمكنه تعديل نقاط اللاعبين يدوياً</p>
+                    <p style="color: #ff6b6b; font-size: 13px; margin-top: 8px;">⚠️ في حال انقطاع الاتصال، سيتم إعادة الاتصال تلقائياً خلال 10 ثوانٍ</p>
                 </div>
                 <div id="nameSection">
                     <input type="text" id="playerName" placeholder="👤 أدخل اسمك (مطلوب)" maxlength="20">
@@ -1091,54 +905,39 @@
         </div>
     </div>
 
-    <!-- نافذة كتابة الاقتراحات (تظهر للجميع) -->
+    <!-- نافذة كتابة الاقتراحات -->
     <div id="suggestionModal" class="vote-modal" style="display: none;">
         <div class="vote-card" style="border-color: #4facfe;">
             <h2 style="text-align: center; color: #4facfe; margin-bottom: 10px;">📝 مرحلة كتابة الاقتراحات</h2>
-            <div id="suggestionContent">
-                <!-- سيتم ملء هذا ديناميكياً حسب دور اللاعب -->
-            </div>
+            <div id="suggestionContent"></div>
         </div>
     </div>
 
-    <!-- نافذة عرض الاقتراحات لجميع اللاعبين (عدا الدخيل) -->
+    <!-- نافذة عرض الاقتراحات -->
     <div id="liveSuggestionsModal" class="vote-modal" style="display: none;">
         <div class="vote-card" style="border-color: #4facfe; max-width: 600px;">
             <h2 style="text-align: center; color: #4facfe; margin-bottom: 10px;">📝 اقتراحات اللاعبين</h2>
-            <p style="text-align: center; margin-bottom: 10px; font-size: 14px; color: #eee;">
-                الاقتراحات التي كتبها اللاعبون تظهر هنا فوراً
-            </p>
+            <p style="text-align: center; margin-bottom: 10px; font-size: 14px; color: #eee;">الاقتراحات التي كتبها اللاعبون تظهر هنا فوراً</p>
             <div id="liveSuggestionsList" class="suggestion-reveal-list"></div>
             <div class="progress-bar" style="margin-top: 10px;">
                 <div id="liveProgressFill" class="progress-fill" style="width: 0%;"></div>
             </div>
             <p id="liveSuggestionsStatus" style="text-align: center; color: #aaa; margin-top: 5px;"></p>
-            
             <div id="hostSendSuggestions" style="display: none; margin-top: 15px;">
-                <button class="send-suggestions-btn" onclick="sendSuggestionsToSpy()">
-                    📤 إرسال الاقتراحات إلى الدخيل
-                </button>
-                <p style="text-align: center; color: #ffc107; font-size: 12px; margin-top: 5px;">
-                    ⏳ انتظر حتى يكتب جميع اللاعبين اقتراحاتهم
-                </p>
+                <button class="send-suggestions-btn" onclick="sendSuggestionsToSpy()">📤 إرسال الاقتراحات إلى الدخيل</button>
+                <p style="text-align: center; color: #ffc107; font-size: 12px; margin-top: 5px;">⏳ انتظر حتى يكتب جميع اللاعبين اقتراحاتهم</p>
             </div>
-            
             <button onclick="closeLiveSuggestions()" class="btn-secondary" style="margin-top: 10px;">✖️ إغلاق</button>
         </div>
     </div>
 
-    <!-- نافذة عرض الاقتراحات للدخيل مع العد التنازلي -->
+    <!-- نافذة عرض الاقتراحات للدخيل -->
     <div id="spySuggestionsModal" class="vote-modal" style="display: none;">
         <div class="vote-card" style="border-color: #ff4444; max-width: 600px;">
             <h2 style="text-align: center; color: #ff4444; margin-bottom: 10px;">🕵️ اختر الكلمة الصحيحة</h2>
-            <p style="text-align: center; margin-bottom: 10px; font-size: 14px; color: #eee;">
-                أنت الدخيل! اختر الكلمة التي تعتقد أنها الكلمة الصحيحة
-            </p>
-            <div id="spyTimerDisplay" class="spy-timer-large">
-                ⏱️ <span id="spyTimerSeconds">20</span> ثانية
-            </div>
+            <p style="text-align: center; margin-bottom: 10px; font-size: 14px; color: #eee;">أنت الدخيل! اختر الكلمة التي تعتقد أنها الكلمة الصحيحة</p>
+            <div id="spyTimerDisplay" class="spy-timer-large">⏱️ <span id="spyTimerSeconds">20</span> ثانية</div>
             <div id="spySuggestionsGrid" class="suggestions-grid"></div>
-            <div id="spySuggestionsResult" style="text-align: center; margin-top: 10px;"></div>
         </div>
     </div>
 
@@ -1152,7 +951,7 @@
         </div>
     </div>
 
-    <!-- نافذة تعديل النقاط (للمضيف) -->
+    <!-- نافذة تعديل النقاط -->
     <div id="scoreModal" class="vote-modal" style="display: none;">
         <div class="vote-card" style="max-width: 450px;">
             <h2 style="text-align: center; color: #ffd700; margin-bottom: 10px;">⭐ تعديل نقاط اللاعب</h2>
@@ -1191,16 +990,340 @@
 
         const TARGET_SCORE = 70;
         const SPY_TIMER_DURATION = 20;
+        const HEARTBEAT_INTERVAL = 5000;
 
         let currentPlayer = { name: '', roomCode: '', isHost: false, isSpy: false, score: 0 };
         let gameState = {};
         let timerInterval = null;
         let suggestionsListener = null;
-
         let roomListener = null;
         let chatListener = null;
         let lastShownSummaryRoundId = null;
         let scoreModalTarget = null;
+
+        // Connection management
+        let isReconnecting = false;
+        let reconnectTimer = null;
+        let reconnectCountdown = 10;
+        let isConnected = true;
+        let heartbeatInterval = null;
+
+        // Exit confirm state
+        let isExitConfirmed = false;
+        let pendingExit = false;
+
+        // ========== نافذة تأكيد الخروج ==========
+
+        function showExitConfirm() {
+            if (pendingExit) return;
+            
+            // تحديث معلومات اللاعب في النافذة
+            document.getElementById('exitConfirmPlayerName').textContent = currentPlayer.name || 'غير معروف';
+            document.getElementById('exitConfirmPlayerScore').textContent = currentPlayer.score || 0;
+            
+            document.getElementById('exitConfirmOverlay').classList.add('active');
+            pendingExit = true;
+        }
+
+        function cancelExit() {
+            document.getElementById('exitConfirmOverlay').classList.remove('active');
+            pendingExit = false;
+            isExitConfirmed = false;
+            
+            // إعادة التركيز على اللعبة
+            showAlert('✅ تم إلغاء الخروج، استمر في اللعب!', 'success');
+        }
+
+        function confirmExit() {
+            document.getElementById('exitConfirmOverlay').classList.remove('active');
+            pendingExit = false;
+            isExitConfirmed = true;
+            
+            // تنفيذ الخروج
+            performExit();
+        }
+
+        function performExit() {
+            if (currentPlayer.roomCode) {
+                if (currentPlayer.isHost) {
+                    // المضيف: حذف الغرفة
+                    database.ref(`rooms/${currentPlayer.roomCode}`).remove();
+                    database.ref(`chats/${currentPlayer.roomCode}`).remove();
+                } else {
+                    // لاعب عادي: وضع علامة غير متصل
+                    const updatedPlayers = gameState.players ? gameState.players.filter(p => p !== currentPlayer.name) : [];
+                    const updatedPlayersData = gameState.playersData ? gameState.playersData.map(p => {
+                        if (p.name === currentPlayer.name) {
+                            return { ...p, active: false, lastSeen: Date.now() };
+                        }
+                        return p;
+                    }) : [];
+                    
+                    database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                        players: updatedPlayers,
+                        playersData: updatedPlayersData,
+                        lastActivity: Date.now()
+                    });
+                }
+            }
+            
+            // تنظيف الموارد
+            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+            if (suggestionsListener) { suggestionsListener.off(); suggestionsListener = null; }
+            if (heartbeatInterval) { clearInterval(heartbeatInterval); heartbeatInterval = null; }
+            if (roomListener) { roomListener.off(); roomListener = null; }
+            if (chatListener) { chatListener.off(); chatListener = null; }
+            
+            hideReconnectCountdown();
+            backToStart();
+            
+            showAlert('👋 تم الخروج من اللعبة بنجاح', 'info');
+        }
+
+        // ========== منع الخروج التلقائي من الصفحة ==========
+
+        // منع الخروج التلقائي عند محاولة تحديث الصفحة
+        window.addEventListener('beforeunload', function(e) {
+            if (currentPlayer.roomCode && !isExitConfirmed) {
+                // عرض نافذة التأكيد المخصصة بدلاً من النافذة الافتراضية
+                e.preventDefault();
+                e.returnValue = '';
+                
+                // عرض نافذة التأكيد المخصصة
+                showExitConfirm();
+                
+                // إرجاع رسالة للتوافق مع المتصفحات
+                return '';
+            }
+        });
+
+        // منع الخروج عند إغلاق علامة التبويب
+        window.addEventListener('unload', function(e) {
+            if (currentPlayer.roomCode && !isExitConfirmed) {
+                // محاولة إرسال بيانات الخروج عبر sendBeacon
+                if (currentPlayer.roomCode && !currentPlayer.isHost) {
+                    const leaveData = {
+                        players: gameState.players ? gameState.players.filter(p => p !== currentPlayer.name) : [],
+                        playersData: gameState.playersData ? gameState.playersData.map(p => {
+                            if (p.name === currentPlayer.name) {
+                                return { ...p, active: false, lastSeen: Date.now() };
+                            }
+                            return p;
+                        }) : [],
+                        lastActivity: Date.now()
+                    };
+                    
+                    if (navigator.sendBeacon) {
+                        const blob = new Blob([JSON.stringify(leaveData)], { type: 'application/json' });
+                        navigator.sendBeacon(`https://my-online-store-34f34-default-rtdb.europe-west1.firebasedatabase.app/rooms/${currentPlayer.roomCode}.json`, blob);
+                    }
+                }
+            }
+        });
+
+        // التعامل مع محاولة التحديث عبر F5 أو Ctrl+R
+        document.addEventListener('keydown', function(e) {
+            if ((e.key === 'F5') || (e.ctrlKey && e.key === 'r')) {
+                if (currentPlayer.roomCode) {
+                    e.preventDefault();
+                    showExitConfirm();
+                }
+            }
+        });
+
+        // التعامل مع زر الرجوع في المتصفح
+        window.addEventListener('popstate', function(e) {
+            if (currentPlayer.roomCode && document.getElementById('gameScreen').classList.contains('active')) {
+                showExitConfirm();
+                // إعادة إضافة الحالة لمنع الرجوع التلقائي
+                history.pushState(null, '', window.location.href);
+            }
+        });
+
+        // إضافة حالة للمتصفح لمنع الرجوع
+        history.pushState(null, '', window.location.href);
+
+        // ========== Connection Management Functions ==========
+
+        function updateConnectionStatus(status) {
+            const el = document.getElementById('connectionStatus');
+            if (status === 'online') {
+                el.className = 'connection-status online';
+                el.textContent = '🟢 متصل';
+                isConnected = true;
+                hideReconnectCountdown();
+            } else {
+                el.className = 'connection-status offline';
+                el.textContent = '🔴 غير متصل';
+                isConnected = false;
+            }
+        }
+
+        function showReconnectCountdown(seconds) {
+            const el = document.getElementById('reconnectCountdown');
+            const timerEl = document.getElementById('reconnectTimer');
+            el.style.display = 'block';
+            timerEl.textContent = seconds;
+        }
+
+        function hideReconnectCountdown() {
+            document.getElementById('reconnectCountdown').style.display = 'none';
+        }
+
+        function startReconnectCountdown() {
+            if (isReconnecting) return;
+            isReconnecting = true;
+            reconnectCountdown = 10;
+
+            showReconnectCountdown(reconnectCountdown);
+
+            if (reconnectTimer) clearInterval(reconnectTimer);
+            reconnectTimer = setInterval(() => {
+                reconnectCountdown--;
+                document.getElementById('reconnectTimer').textContent = reconnectCountdown;
+
+                if (reconnectCountdown <= 0) {
+                    clearInterval(reconnectTimer);
+                    reconnectTimer = null;
+                    attemptReconnect();
+                }
+            }, 1000);
+        }
+
+        async function attemptReconnect() {
+            try {
+                updateConnectionStatus('offline');
+                
+                const snapshot = await database.ref(`rooms/${currentPlayer.roomCode}`).once('value');
+                const room = snapshot.val();
+
+                if (!room) {
+                    hideReconnectCountdown();
+                    showAlert('❌ الغرفة غير موجودة أو تم حذفها', 'error');
+                    backToStart();
+                    return;
+                }
+
+                const playerExists = room.playersData.find(p => p.name === currentPlayer.name);
+                if (!playerExists) {
+                    hideReconnectCountdown();
+                    showAlert('❌ تم طردك من الغرفة', 'error');
+                    backToStart();
+                    return;
+                }
+
+                const updatedPlayers = room.players.includes(currentPlayer.name) ? 
+                    room.players : [...room.players, currentPlayer.name];
+                
+                const updatedPlayersData = room.playersData.map(p => {
+                    if (p.name === currentPlayer.name) {
+                        return { ...p, active: true, lastSeen: Date.now() };
+                    }
+                    return p;
+                });
+
+                await database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                    players: updatedPlayers,
+                    playersData: updatedPlayersData,
+                    isPhaseReset: false,
+                    lastActivity: Date.now()
+                });
+
+                const myData = updatedPlayersData.find(p => p.name === currentPlayer.name);
+                if (myData) {
+                    currentPlayer.isHost = myData.isHost || false;
+                    currentPlayer.score = room.scores[currentPlayer.name] || 0;
+                }
+
+                hideReconnectCountdown();
+                updateConnectionStatus('online');
+                isReconnecting = false;
+
+                showRejoinNotification(currentPlayer.name);
+                sendSystemMessage(`🔄 عاد اللاعب ${currentPlayer.name} إلى الغرفة! (استعادة النقاط: ${currentPlayer.score})`);
+                playSound('rejoin');
+                showAlert(`✅ تم إعادة الاتصال بنجاح! مرحباً بعودتك ${currentPlayer.name}`, 'success');
+
+            } catch (error) {
+                console.error('Reconnect attempt failed:', error);
+                if (reconnectCountdown > 0) {
+                    startReconnectCountdown();
+                } else {
+                    hideReconnectCountdown();
+                    showAlert('❌ فشل إعادة الاتصال. الرجاء تحديث الصفحة.', 'error');
+                    isReconnecting = false;
+                }
+            }
+        }
+
+        function manualReconnect() {
+            if (reconnectTimer) {
+                clearInterval(reconnectTimer);
+                reconnectTimer = null;
+            }
+            hideReconnectCountdown();
+            attemptReconnect();
+        }
+
+        function startHeartbeat() {
+            if (heartbeatInterval) clearInterval(heartbeatInterval);
+            heartbeatInterval = setInterval(async () => {
+                if (currentPlayer.roomCode && isConnected && !pendingExit) {
+                    try {
+                        const roomRef = database.ref(`rooms/${currentPlayer.roomCode}`);
+                        const snapshot = await roomRef.once('value');
+                        const room = snapshot.val();
+                        
+                        if (room && room.playersData) {
+                            const playerData = room.playersData.find(p => p.name === currentPlayer.name);
+                            if (playerData) {
+                                const updatedPlayersData = room.playersData.map(p => {
+                                    if (p.name === currentPlayer.name) {
+                                        return { ...p, lastSeen: Date.now(), active: true };
+                                    }
+                                    return p;
+                                });
+                                
+                                await roomRef.update({
+                                    playersData: updatedPlayersData,
+                                    lastActivity: Date.now()
+                                });
+                            }
+                        }
+                    } catch (error) {
+                        console.log('Heartbeat failed:', error);
+                        if (!isReconnecting && !pendingExit) {
+                            startReconnectCountdown();
+                        }
+                    }
+                }
+            }, HEARTBEAT_INTERVAL);
+        }
+
+        function monitorConnection() {
+            const connectedRef = database.ref('.info/connected');
+            connectedRef.on('value', (snap) => {
+                if (snap.val() === true) {
+                    updateConnectionStatus('online');
+                    if (isReconnecting) {
+                        hideReconnectCountdown();
+                        isReconnecting = false;
+                        if (currentPlayer.roomCode && !pendingExit) {
+                            showRejoinNotification(currentPlayer.name);
+                            sendSystemMessage(`🔄 عاد اللاعب ${currentPlayer.name} إلى الغرفة!`);
+                            showAlert(`✅ تم استعادة الاتصال!`, 'success');
+                        }
+                    }
+                } else {
+                    updateConnectionStatus('offline');
+                    if (currentPlayer.roomCode && !isReconnecting && !pendingExit) {
+                        startReconnectCountdown();
+                    }
+                }
+            });
+        }
+
+        // ========== باقي دوال اللعبة ==========
 
         function playSound(type) {
             try {
@@ -1223,12 +1346,8 @@
                     gainNode.gain.value = 0.3;
                     oscillator.type = 'sine';
                     oscillator.start();
-                    setTimeout(() => {
-                        oscillator.frequency.value = 659.25;
-                    }, 100);
-                    setTimeout(() => {
-                        oscillator.frequency.value = 783.99;
-                    }, 200);
+                    setTimeout(() => { oscillator.frequency.value = 659.25; }, 100);
+                    setTimeout(() => { oscillator.frequency.value = 783.99; }, 200);
                     gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.8);
                     oscillator.stop(audioContext.currentTime + 0.8);
                 } else if (type === 'error') {
@@ -1243,12 +1362,8 @@
                     gainNode.gain.value = 0.2;
                     oscillator.type = 'triangle';
                     oscillator.start();
-                    setTimeout(() => {
-                        oscillator.frequency.value = 261.63;
-                    }, 150);
-                    setTimeout(() => {
-                        oscillator.frequency.value = 392.00;
-                    }, 300);
+                    setTimeout(() => { oscillator.frequency.value = 261.63; }, 150);
+                    setTimeout(() => { oscillator.frequency.value = 392.00; }, 300);
                     gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.8);
                     oscillator.stop(audioContext.currentTime + 0.8);
                 } else if (type === 'timer') {
@@ -1263,12 +1378,8 @@
                     gainNode.gain.value = 0.3;
                     oscillator.type = 'sine';
                     oscillator.start();
-                    setTimeout(() => {
-                        oscillator.frequency.value = 659.25;
-                    }, 150);
-                    setTimeout(() => {
-                        oscillator.frequency.value = 783.99;
-                    }, 300);
+                    setTimeout(() => { oscillator.frequency.value = 659.25; }, 150);
+                    setTimeout(() => { oscillator.frequency.value = 783.99; }, 300);
                     gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.8);
                     oscillator.stop(audioContext.currentTime + 0.8);
                 } else if (type === 'score-up') {
@@ -1276,12 +1387,8 @@
                     gainNode.gain.value = 0.3;
                     oscillator.type = 'sine';
                     oscillator.start();
-                    setTimeout(() => {
-                        oscillator.frequency.value = 659.25;
-                    }, 100);
-                    setTimeout(() => {
-                        oscillator.frequency.value = 783.99;
-                    }, 200);
+                    setTimeout(() => { oscillator.frequency.value = 659.25; }, 100);
+                    setTimeout(() => { oscillator.frequency.value = 783.99; }, 200);
                     gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.6);
                     oscillator.stop(audioContext.currentTime + 0.6);
                 } else if (type === 'score-down') {
@@ -1415,14 +1522,19 @@
             document.getElementById('voteModal').style.display = 'none';
             document.getElementById('roundSummaryModal').style.display = 'none';
             document.getElementById('scoreModal').style.display = 'none';
-            if (roomListener) { roomListener.off();
-                roomListener = null; }
-            if (chatListener) { chatListener.off();
-                chatListener = null; }
-            if (suggestionsListener) { suggestionsListener.off();
-                suggestionsListener = null; }
-            if (timerInterval) { clearInterval(timerInterval);
-                timerInterval = null; }
+            hideReconnectCountdown();
+            document.getElementById('exitConfirmOverlay').classList.remove('active');
+            
+            if (roomListener) { roomListener.off(); roomListener = null; }
+            if (chatListener) { chatListener.off(); chatListener = null; }
+            if (suggestionsListener) { suggestionsListener.off(); suggestionsListener = null; }
+            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+            if (heartbeatInterval) { clearInterval(heartbeatInterval); heartbeatInterval = null; }
+            
+            currentPlayer.roomCode = '';
+            isReconnecting = false;
+            pendingExit = false;
+            isExitConfirmed = false;
         }
 
         async function createRoom() {
@@ -1440,7 +1552,8 @@
                     name: currentPlayer.name, 
                     isHost: true, 
                     score: 0,
-                    active: true 
+                    active: true,
+                    lastSeen: Date.now()
                 }],
                 gameStarted: false,
                 roundEnded: false,
@@ -1463,7 +1576,8 @@
                 suggestionsSentToSpy: false,
                 spyTimerStarted: false,
                 isPhaseReset: false,
-                createdAt: Date.now()
+                createdAt: Date.now(),
+                lastActivity: Date.now()
             };
 
             await database.ref(`rooms/${roomCode}`).set(roomData);
@@ -1474,8 +1588,6 @@
             showAlert(`✅ تم إنشاء الغرفة بنجاح! كود: ${roomCode}`, 'success');
             playSound('success');
         }
-
-        // ========== دالة الانضمام (مع إعادة الانضمام) ==========
 
         async function joinRoom() {
             const roomCode = document.getElementById('roomCodeJoin').value.trim();
@@ -1510,7 +1622,7 @@
 
                 const updatedPlayersData = room.playersData.map(p => {
                     if (p.name === currentPlayer.name) {
-                        return { ...p, active: true };
+                        return { ...p, active: true, lastSeen: Date.now() };
                     }
                     return p;
                 });
@@ -1520,7 +1632,8 @@
                 await database.ref(`rooms/${roomCode}`).update({
                     players: newPlayers,
                     playersData: updatedPlayersData,
-                    isPhaseReset: false
+                    isPhaseReset: false,
+                    lastActivity: Date.now()
                 });
 
                 currentPlayer.roomCode = roomCode;
@@ -1541,7 +1654,8 @@
                 name: currentPlayer.name, 
                 isHost: false, 
                 score: room.scores[currentPlayer.name] || 0,
-                active: true 
+                active: true,
+                lastSeen: Date.now()
             }];
 
             const newScores = { ...room.scores };
@@ -1553,7 +1667,8 @@
                 players: newPlayers,
                 playersData: newPlayersData,
                 scores: newScores,
-                isPhaseReset: false
+                isPhaseReset: false,
+                lastActivity: Date.now()
             });
 
             currentPlayer.roomCode = roomCode;
@@ -1590,6 +1705,13 @@
             document.getElementById('joinScreen').classList.remove('active');
             document.getElementById('startScreen').classList.remove('active');
             document.getElementById('roomCodeDisplay').textContent = roomCode;
+
+            // Start connection monitoring
+            monitorConnection();
+            startHeartbeat();
+
+            // إضافة حالة للمتصفح لمنع الرجوع
+            history.pushState(null, '', window.location.href);
 
             if (roomListener) roomListener.off();
             roomListener = database.ref(`rooms/${roomCode}`);
@@ -1634,6 +1756,13 @@
                 currentPlayer.isSpy = (currentPlayer.name === gameState.spyName);
             }
 
+            const stillInRoom = gameState.playersData.some(p => p.name === currentPlayer.name);
+            if (!stillInRoom && currentPlayer.roomCode) {
+                showAlert('❌ تم طردك من الغرفة', 'error');
+                backToStart();
+                return;
+            }
+
             if (gameState.mode === 'LOCAL') {
                 document.getElementById('chatPanel').style.display = 'none';
                 document.getElementById('mainGamePanel').style.flex = '1';
@@ -1675,8 +1804,7 @@
 
             if (gameState.spyChose || gameState.roundEnded) {
                 document.getElementById('spySuggestionsModal').style.display = 'none';
-                if (timerInterval) { clearInterval(timerInterval);
-                    timerInterval = null; }
+                if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
             }
 
             if (gameState.roundEnded && gameState.roundId && gameState.roundId !== lastShownSummaryRoundId) {
@@ -1697,97 +1825,7 @@
             }
         }
 
-        // ========== دالة تعديل النقاط ==========
-
-        function openScoreModal(playerName) {
-            if (!currentPlayer.isHost) return;
-            scoreModalTarget = playerName;
-            document.getElementById('scoreModalPlayerName').textContent = playerName;
-            document.getElementById('scoreModalCurrentScore').textContent = gameState.scores[playerName] || 0;
-            document.getElementById('scoreModal').style.display = 'flex';
-            document.getElementById('customScoreInput').value = '';
-        }
-
-        function closeScoreModal() {
-            document.getElementById('scoreModal').style.display = 'none';
-            scoreModalTarget = null;
-        }
-
-        async function adjustScore(amount) {
-            if (!currentPlayer.isHost || !scoreModalTarget) return;
-            
-            const playerName = scoreModalTarget;
-            const currentScore = gameState.scores[playerName] || 0;
-            const newScore = currentScore + amount;
-            
-            // منع النقاط السالبة
-            if (newScore < 0) {
-                showAlert('❌ لا يمكن أن تصبح النقاط أقل من 0!', 'error');
-                return;
-            }
-
-            const updatedScores = { ...gameState.scores };
-            updatedScores[playerName] = newScore;
-
-            // تحديث playersData
-            const updatedPlayersData = gameState.playersData.map(p => {
-                if (p.name === playerName) {
-                    return { ...p, score: newScore };
-                }
-                return p;
-            });
-
-            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
-                scores: updatedScores,
-                playersData: updatedPlayersData
-            });
-
-            // إشعار
-            const sign = amount > 0 ? '+' : '';
-            showScoreNotification(playerName, amount);
-            sendSystemMessage(`⭐ تم تعديل نقاط ${playerName}: ${sign}${amount} نقطة (المجموع: ${newScore}) بواسطة المضيف`);
-            playSound(amount > 0 ? 'score-up' : 'score-down');
-            showAlert(`✅ تم ${amount > 0 ? 'إضافة' : 'خصم'} ${Math.abs(amount)} نقطة ${amount > 0 ? 'إلى' : 'من'} ${playerName}`, 'success');
-
-            closeScoreModal();
-        }
-
-        async function adjustCustomScore() {
-            if (!currentPlayer.isHost || !scoreModalTarget) return;
-            
-            const input = document.getElementById('customScoreInput');
-            const value = parseInt(input.value);
-            
-            if (isNaN(value) || value === 0) {
-                showAlert('❌ الرجاء إدخال قيمة صحيحة (موجبة أو سالبة)', 'error');
-                return;
-            }
-
-            await adjustScore(value);
-        }
-
-        function showScoreNotification(playerName, amount) {
-            const existing = document.querySelector('.score-change-notification');
-            if (existing) existing.remove();
-
-            const div = document.createElement('div');
-            div.className = `score-change-notification ${amount > 0 ? 'positive' : 'negative'}`;
-            const sign = amount > 0 ? '+' : '';
-            div.innerHTML = `
-                <span class="icon">${amount > 0 ? '⬆️' : '⬇️'}</span>
-                ${playerName}: ${sign}${amount} نقطة
-                <div class="sub">النقاط الجديدة: ${gameState.scores[playerName] + amount || 0}</div>
-            `;
-            document.body.appendChild(div);
-
-            setTimeout(() => {
-                div.style.opacity = '0';
-                div.style.transition = 'opacity 0.8s ease';
-                setTimeout(() => div.remove(), 900);
-            }, 2500);
-        }
-
-        // ========== updatePlayersListUI مع أزرار التحكم في النقاط ==========
+        // ========== updatePlayersListUI ==========
 
         function updatePlayersListUI() {
             const container = document.getElementById('playersContainer');
@@ -1795,11 +1833,15 @@
 
             gameState.playersData.forEach(player => {
                 const isActive = gameState.players.includes(player.name);
+                const isDisconnected = player.active === false || 
+                    (player.lastSeen && Date.now() - player.lastSeen > 15000);
+                
                 const card = document.createElement('div');
                 card.className = 'player-card';
+                card.id = `player-${player.name}`;
 
-                if (!isActive) {
-                    card.classList.add('inactive-player');
+                if (!isActive || isDisconnected) {
+                    card.classList.add('disconnected');
                 }
 
                 if (gameState.roundEnded && player.name === gameState.spyName) {
@@ -1812,6 +1854,8 @@
                 let statusBadge = '';
                 if (!isActive) {
                     statusBadge = '<div class="player-badge badge-inactive">⏸️ غير متصل</div>';
+                } else if (isDisconnected) {
+                    statusBadge = '<div class="player-badge badge-disconnected">📡 انقطع الاتصال</div>';
                 } else if (player.isHost) {
                     statusBadge = '<div class="player-badge badge-host">👑 مضيف</div>';
                 }
@@ -1822,11 +1866,10 @@
                     ${statusBadge}
                     ${(gameState.roundEnded && player.name === gameState.spyName) ? '<div class="player-badge badge-spy">🕵️ كان دخيلاً</div>' : ''}
                     <div class="player-score">⭐ ${gameState.scores[player.name] || 0} نقطة</div>
-                    ${!isActive ? '<div style="font-size: 11px; color: #888; margin-top: 5px;">⏳ يمكنه العودة بنفس الاسم</div>' : ''}
+                    ${(!isActive || isDisconnected) ? '<div style="font-size: 11px; color: #ff8888; margin-top: 5px;">⏳ يحاول إعادة الاتصال...</div>' : ''}
                 `;
 
-                // أزرار التحكم في النقاط (للمضيف فقط، وللاعبين النشطين)
-                if (currentPlayer.isHost && isActive && player.name !== currentPlayer.name) {
+                if (currentPlayer.isHost && isActive && !isDisconnected && player.name !== currentPlayer.name) {
                     playerHTML += `
                         <div class="score-controls">
                             <div class="btn-group-label">🎯 تعديل النقاط</div>
@@ -1896,12 +1939,15 @@
             scoresDiv.innerHTML = sortedPlayers.map(([name, score]) => {
                 const scoreClass = score < 0 ? 'negative-score' : '';
                 const isWinner = score >= TARGET_SCORE;
+                const playerData = gameState.playersData.find(p => p.name === name);
                 const isActive = gameState.players.includes(name);
+                const isDisconnected = playerData && (playerData.active === false || 
+                    (playerData.lastSeen && Date.now() - playerData.lastSeen > 15000));
                 return `
-                    <div class="score-item ${isWinner ? 'winner-score' : ''}" style="${!isActive ? 'opacity: 0.5;' : ''}">
+                    <div class="score-item ${isWinner ? 'winner-score' : ''}" style="${(!isActive || isDisconnected) ? 'opacity: 0.5;' : ''}">
                         <strong>${name}</strong>: <span class="${scoreClass}">${score} ن</span>
-                        ${!isActive ? '⏸️' : ''}
-                        ${currentPlayer.isHost && isActive && name !== currentPlayer.name ? ' 👑' : ''}
+                        ${(!isActive || isDisconnected) ? '📡' : ''}
+                        ${currentPlayer.isHost && isActive && !isDisconnected && name !== currentPlayer.name ? ' 👑' : ''}
                     </div>`;
             }).join('');
         }
@@ -1967,7 +2013,94 @@
             }
         }
 
-        // ========== دالة إعادة ضبط المرحلة ==========
+        // ========== دوال تعديل النقاط ==========
+
+        function openScoreModal(playerName) {
+            if (!currentPlayer.isHost) return;
+            scoreModalTarget = playerName;
+            document.getElementById('scoreModalPlayerName').textContent = playerName;
+            document.getElementById('scoreModalCurrentScore').textContent = gameState.scores[playerName] || 0;
+            document.getElementById('scoreModal').style.display = 'flex';
+            document.getElementById('customScoreInput').value = '';
+        }
+
+        function closeScoreModal() {
+            document.getElementById('scoreModal').style.display = 'none';
+            scoreModalTarget = null;
+        }
+
+        async function adjustScore(amount) {
+            if (!currentPlayer.isHost || !scoreModalTarget) return;
+            
+            const playerName = scoreModalTarget;
+            const currentScore = gameState.scores[playerName] || 0;
+            const newScore = currentScore + amount;
+            
+            if (newScore < 0) {
+                showAlert('❌ لا يمكن أن تصبح النقاط أقل من 0!', 'error');
+                return;
+            }
+
+            const updatedScores = { ...gameState.scores };
+            updatedScores[playerName] = newScore;
+
+            const updatedPlayersData = gameState.playersData.map(p => {
+                if (p.name === playerName) {
+                    return { ...p, score: newScore };
+                }
+                return p;
+            });
+
+            await database.ref(`rooms/${currentPlayer.roomCode}`).update({
+                scores: updatedScores,
+                playersData: updatedPlayersData
+            });
+
+            const sign = amount > 0 ? '+' : '';
+            showScoreNotification(playerName, amount);
+            sendSystemMessage(`⭐ تم تعديل نقاط ${playerName}: ${sign}${amount} نقطة (المجموع: ${newScore}) بواسطة المضيف`);
+            playSound(amount > 0 ? 'score-up' : 'score-down');
+            showAlert(`✅ تم ${amount > 0 ? 'إضافة' : 'خصم'} ${Math.abs(amount)} نقطة ${amount > 0 ? 'إلى' : 'من'} ${playerName}`, 'success');
+
+            closeScoreModal();
+        }
+
+        async function adjustCustomScore() {
+            if (!currentPlayer.isHost || !scoreModalTarget) return;
+            
+            const input = document.getElementById('customScoreInput');
+            const value = parseInt(input.value);
+            
+            if (isNaN(value) || value === 0) {
+                showAlert('❌ الرجاء إدخال قيمة صحيحة (موجبة أو سالبة)', 'error');
+                return;
+            }
+
+            await adjustScore(value);
+        }
+
+        function showScoreNotification(playerName, amount) {
+            const existing = document.querySelector('.score-change-notification');
+            if (existing) existing.remove();
+
+            const div = document.createElement('div');
+            div.className = `score-change-notification ${amount > 0 ? 'positive' : 'negative'}`;
+            const sign = amount > 0 ? '+' : '';
+            div.innerHTML = `
+                <span class="icon">${amount > 0 ? '⬆️' : '⬇️'}</span>
+                ${playerName}: ${sign}${amount} نقطة
+                <div class="sub">النقاط الجديدة: ${gameState.scores[playerName] + amount || 0}</div>
+            `;
+            document.body.appendChild(div);
+
+            setTimeout(() => {
+                div.style.opacity = '0';
+                div.style.transition = 'opacity 0.8s ease';
+                setTimeout(() => div.remove(), 900);
+            }, 2500);
+        }
+
+        // ========== دوال إعادة ضبط المرحلة ==========
 
         async function resetPhase() {
             if (!currentPlayer.isHost) return;
@@ -1994,8 +2127,7 @@
                 roundId: Date.now()
             });
 
-            if (timerInterval) { clearInterval(timerInterval);
-                timerInterval = null; }
+            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
             document.getElementById('liveSuggestionsModal').style.display = 'none';
             document.getElementById('spySuggestionsModal').style.display = 'none';
             document.getElementById('roundSummaryModal').style.display = 'none';
@@ -2005,7 +2137,7 @@
             playSound('reveal');
         }
 
-        // ========== لوحة ملخص الجولة ==========
+        // ========== دوال ملخص الجولة ==========
 
         function showRoundSummaryModal() {
             const spyName = gameState.spyName;
@@ -2097,7 +2229,7 @@
             document.getElementById('roundSummaryModal').style.display = 'none';
         }
 
-        // ========== عرض الاقتراحات فوراً لغير الدخيل ==========
+        // ========== دوال الاقتراحات ==========
 
         function updateLiveSuggestions(suggestions) {
             if (currentPlayer.isSpy) return;
@@ -2139,8 +2271,6 @@
         function closeLiveSuggestions() {
             document.getElementById('liveSuggestionsModal').style.display = 'none';
         }
-
-        // ========== إرسال الاقتراحات إلى الدخيل ==========
 
         async function deliverSuggestionsToSpy(roomState) {
             if (roomState.suggestionsSentToSpy) return;
@@ -2188,8 +2318,6 @@
 
             await deliverSuggestionsToSpy(gameState);
         }
-
-        // ========== عرض الاقتراحات للدخيل مع العد التنازلي ==========
 
         function showSpySuggestions(suggestions) {
             if (!currentPlayer.isSpy) return;
@@ -2313,29 +2441,23 @@
             document.getElementById('spySuggestionsModal').style.display = 'none';
         }
 
-        // ========== اختيار الدخيل للكلمة ==========
-
         async function submitSpyChoice(selectedWord) {
             if (!currentPlayer.isSpy) return;
             if (gameState.spyChose || gameState.roundEnded) return;
 
-            if (timerInterval) { clearInterval(timerInterval);
-                timerInterval = null; }
+            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
 
             const spyName = gameState.spyName;
             const secretWord = gameState.secretWord;
             const currentScores = { ...gameState.scores };
 
             let isCorrect = selectedWord === secretWord;
-            let scoreChange = 0;
 
             if (isCorrect) {
                 currentScores[spyName] = (currentScores[spyName] || 0) + 10;
-                scoreChange = 10;
                 playSound('success');
             } else {
                 currentScores[spyName] = (currentScores[spyName] || 0) - 5;
-                scoreChange = -5;
                 playSound('error');
             }
 
@@ -2370,7 +2492,7 @@
             document.getElementById('spySuggestionsModal').style.display = 'none';
         }
 
-        // ========== تغيير الكلمة والدخيل ==========
+        // ========== دوال تغيير الكلمة والدخيل ==========
 
         async function changeSecretWord() {
             if (!currentPlayer.isHost) return;
@@ -2413,7 +2535,7 @@
             playSound('reveal');
         }
 
-        // ========== التصويت ==========
+        // ========== دوال التصويت ==========
 
         async function openVoting() {
             await database.ref(`rooms/${currentPlayer.roomCode}`).update({
@@ -2531,7 +2653,7 @@
             playSound('reveal');
         }
 
-        // ========== كتابة الاقتراحات ==========
+        // ========== دوال كتابة الاقتراحات ==========
 
         function showSuggestionModal() {
             const modal = document.getElementById('suggestionModal');
@@ -2554,10 +2676,6 @@
                         <p style="margin-top: 10px; color: #ff6b6b;">🔒 ستصل الاقتراحات إليك تلقائياً بمجرد أن يكتبها جميع اللاعبين!</p>
                     </div>
                 `;
-                const progressFill = document.getElementById('spyProgressFill');
-                if (progressFill) {
-                    progressFill.style.width = `${totalPlayers > 0 ? (submitted / totalPlayers) * 100 : 0}%`;
-                }
                 document.getElementById('liveSuggestionsModal').style.display = 'none';
             } else {
                 const hasSuggested = gameState.suggestions && gameState.suggestions[currentPlayer.name] !== undefined;
@@ -2589,7 +2707,6 @@
                         <p style="text-align: center; color: #aaa; margin-top: 5px;">
                             ${submitted} / ${totalPlayers} لاعب كتب اقتراحه
                         </p>
-                        <div id="suggestionStatus" style="text-align: center; margin-top: 10px; color: #ffc107;"></div>
                         <p style="text-align: center; color: #4facfe; margin-top: 5px;">💡 بعد الإرسال، ستظهر اقتراحات اللاعبين فوراً في نافذة منفصلة</p>
                     `;
                     setTimeout(() => {
@@ -2660,7 +2777,7 @@
             }
         }
 
-        // ========== بدء الجولة التالية ==========
+        // ========== دوال بدء الجولة التالية ==========
 
         async function startNextRound() {
             await database.ref(`rooms/${currentPlayer.roomCode}`).update({
@@ -2679,8 +2796,7 @@
                 displayedSuggestions: [],
                 isPhaseReset: false
             });
-            if (timerInterval) { clearInterval(timerInterval);
-                timerInterval = null; }
+            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
             document.getElementById('liveSuggestionsModal').style.display = 'none';
             document.getElementById('spySuggestionsModal').style.display = 'none';
             document.getElementById('roundSummaryModal').style.display = 'none';
@@ -2688,7 +2804,7 @@
             playSound('reveal');
         }
 
-        // ========== بدء اللعبة ==========
+        // ========== دوال بدء اللعبة ==========
 
         async function startGame() {
             const activePlayers = gameState.players.length;
@@ -2721,7 +2837,7 @@
             playSound('reveal');
         }
 
-        // ========== تصفير اللعبة ==========
+        // ========== دوال تصفير اللعبة ==========
 
         async function resetFullGame() {
             const initialScores = {};
@@ -2744,15 +2860,14 @@
                 displayedSuggestions: [],
                 isPhaseReset: false
             });
-            if (timerInterval) { clearInterval(timerInterval);
-                timerInterval = null; }
+            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
             document.getElementById('liveSuggestionsModal').style.display = 'none';
             document.getElementById('spySuggestionsModal').style.display = 'none';
             document.getElementById('roundSummaryModal').style.display = 'none';
             startGame();
         }
 
-        // ========== طرد لاعب نهائياً ==========
+        // ========== دوال طرد لاعب ==========
 
         async function kickPlayer(playerName) {
             if (!currentPlayer.isHost) return;
@@ -2774,7 +2889,7 @@
             showAlert(`✅ تم طرد ${playerName} نهائياً`, 'info');
         }
 
-        // ========== الدردشة ==========
+        // ========== دوال الدردشة ==========
 
         function sendChat() {
             const input = document.getElementById('chatInput');
@@ -2803,7 +2918,7 @@
             showAlert('📋 تم نسخ كود الغرفة إلى الحافظة!', 'info');
         }
 
-        // ========== مغادرة الغرفة ==========
+        // ========== دوال مغادرة الغرفة ==========
 
         async function leaveRoom() {
             if (!currentPlayer.roomCode) return;
@@ -2819,7 +2934,7 @@
                 const updatedPlayers = gameState.players.filter(p => p !== currentPlayer.name);
                 const updatedPlayersData = gameState.playersData.map(p => {
                     if (p.name === currentPlayer.name) {
-                        return { ...p, active: false };
+                        return { ...p, active: false, lastSeen: Date.now() };
                     }
                     return p;
                 });
@@ -2831,10 +2946,10 @@
                 sendSystemMessage(`👋 غادر اللاعب ${currentPlayer.name} الغرفة. (يمكنه العودة بنفس الاسم والنقاط)`);
                 showAlert(`👋 تم مغادرة الغرفة. يمكنك العودة بنفس الاسم والنقاط.`, 'info');
             }
-            if (timerInterval) { clearInterval(timerInterval);
-                timerInterval = null; }
-            if (suggestionsListener) { suggestionsListener.off();
-                suggestionsListener = null; }
+            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+            if (suggestionsListener) { suggestionsListener.off(); suggestionsListener = null; }
+            if (heartbeatInterval) { clearInterval(heartbeatInterval); heartbeatInterval = null; }
+            hideReconnectCountdown();
             backToStart();
         }
 
@@ -2847,6 +2962,7 @@
         }
 
         validateName();
+        console.log('🕵️ لعبة الدخيل - تم التحميل بنجاح مع نافذة تأكيد الخروج');
     </script>
 </body>
 </html>
